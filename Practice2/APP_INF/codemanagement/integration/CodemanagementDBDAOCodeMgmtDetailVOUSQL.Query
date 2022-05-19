@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CodemanagementDBDAOCodeMgmtDetailVOUSQL">
+			<desc><![CDATA[update detail vo]]></desc>
+			<sql><![CDATA[
+UPDATE COM_INTG_CD_DTL SET 
+	UPD_DT= SYSDATE
+,	UPD_USR_ID = @[upd_usr_id]
+,	INTG_CD_VAL_DP_SEQ = @[intg_cd_val_dp_seq]
+,	INTG_CD_VAL_DESC = @[intg_cd_val_desc]
+,	INTG_CD_VAL_DP_DESC = @[intg_cd_val_dp_desc]
+,	INTG_CD_VAL_CTNT = @[intg_cd_val_ctnt]
+WHERE	INTG_CD_VAL_CTNT = @[intg_cd_val_ctnt]			]]></sql>
+			<params>
+				<param name="upd_usr_id" type="12" value="" out="N"/>
+				<param name="intg_cd_val_dp_seq" type="12" value="" out="N"/>
+				<param name="intg_cd_val_desc" type="12" value="" out="N"/>
+				<param name="intg_cd_val_dp_desc" type="12" value="" out="N"/>
+				<param name="intg_cd_val_ctnt" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

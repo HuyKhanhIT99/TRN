@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CodemanagementDBDAOCodeMgmtMasterVODSQL">
+			<desc><![CDATA[delete master vo]]></desc>
+			<sql><![CDATA[
+DELETE FROM COM_INTG_CD
+WHERE	INTG_CD_ID = @[intg_cd_id]
+			]]></sql>
+			<params>
+				<param name="intg_cd_id" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

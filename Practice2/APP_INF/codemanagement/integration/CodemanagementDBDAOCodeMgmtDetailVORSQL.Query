@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CodemanagementDBDAOCodeMgmtDetailVORSQL">
+			<desc><![CDATA[Search CDdetail]]></desc>
+			<sql><![CDATA[
+SELECT 
+	UPD_DT
+,	UPD_USR_ID
+,	CRE_DT
+,	CRE_USR_ID
+,	APLY_END_DT
+,	APLY_ST_DT
+,	INTG_CD_VAL_DP_SEQ
+,	INTG_CD_VAL_DESC
+,	INTG_CD_VAL_DP_DESC
+,	INTG_CD_VAL_CTNT
+,	INTG_CD_ID
+FROM COM_INTG_CD_DTL
+WHERE 1=1
+AND   INTG_CD_ID = @[intg_cd_id]
+			]]></sql>
+			<params>
+				<param name="intg_cd_id" type="12" value="ZZZZ" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

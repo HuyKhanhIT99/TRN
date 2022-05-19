@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CodemanagementDBDAOCodeMgmtDetailVOCSQL">
+			<desc><![CDATA[insert detail vo]]></desc>
+			<sql><![CDATA[
+INSERT INTO COM_INTG_CD_DTL (
+	UPD_DT
+,	UPD_USR_ID
+,	CRE_DT
+,	CRE_USR_ID
+,	INTG_CD_VAL_DP_SEQ
+,	INTG_CD_VAL_DESC
+,	INTG_CD_VAL_DP_DESC
+,	INTG_CD_VAL_CTNT
+,	INTG_CD_ID
+) VALUES( 
+	SYSDATE
+,	@[upd_usr_id]
+,	SYSDATE
+,	@[cre_usr_id]
+,	@[intg_cd_val_dp_seq]
+,	@[intg_cd_val_desc]
+,	@[intg_cd_val_dp_desc]
+,	@[intg_cd_val_ctnt]
+,	@[intg_cd_id]
+)			]]></sql>
+			<params>
+				<param name="upd_usr_id" type="12" value="" out="N"/>
+				<param name="cre_usr_id" type="12" value="" out="N"/>
+				<param name="intg_cd_val_dp_seq" type="12" value="" out="N"/>
+				<param name="intg_cd_val_desc" type="12" value="" out="N"/>
+				<param name="intg_cd_val_dp_desc" type="12" value="" out="N"/>
+				<param name="intg_cd_val_ctnt" type="12" value="" out="N"/>
+				<param name="intg_cd_id" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

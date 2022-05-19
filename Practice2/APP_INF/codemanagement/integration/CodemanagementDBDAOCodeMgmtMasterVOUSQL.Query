@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CodemanagementDBDAOCodeMgmtMasterVOUSQL">
+			<desc><![CDATA[Update master vo]]></desc>
+			<sql><![CDATA[
+UPDATE COM_INTG_CD SET 
+	UPD_DT= SYSDATE
+,	UPD_USR_ID = @[upd_usr_id]
+,	INTG_CD_USE_FLG = @[intg_cd_use_flg]
+,	MNG_TBL_NM = @[mng_tbl_nm]
+,	OWNR_SUB_SYS_CD = @[ownr_sub_sys_cd]
+,	INTG_CD_LEN = @[intg_cd_len]
+,	INTG_CD_TP_CD = @[intg_cd_tp_cd]
+,	INTG_CD_DESC = @[intg_cd_desc]
+,	INTG_CD_NM = @[intg_cd_nm]
+WHERE	INTG_CD_ID = @[intg_cd_id]
+			]]></sql>
+			<params>
+				<param name="upd_usr_id" type="12" value="" out="N"/>
+				<param name="intg_cd_use_flg" type="12" value="" out="N"/>
+				<param name="mng_tbl_nm" type="12" value="" out="N"/>
+				<param name="ownr_sub_sys_cd" type="12" value="" out="N"/>
+				<param name="intg_cd_len" type="2" value="" out="N"/>
+				<param name="intg_cd_tp_cd" type="12" value="" out="N"/>
+				<param name="intg_cd_desc" type="12" value="" out="N"/>
+				<param name="intg_cd_nm" type="12" value="" out="N"/>
+				<param name="intg_cd_id" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

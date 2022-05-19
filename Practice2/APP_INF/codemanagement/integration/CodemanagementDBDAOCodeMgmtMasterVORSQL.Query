@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CodemanagementDBDAOCodeMgmtMasterVORSQL">
+			<desc><![CDATA[Search Master]]></desc>
+			<sql><![CDATA[
+SELECT 
+	UPD_DT
+,	UPD_USR_ID
+,	CRE_DT
+,	CRE_USR_ID
+,	INTG_CD_USE_FLG
+,	MNG_TBL_NM
+,	OWNR_SUB_SYS_CD
+,	INTG_CD_LEN
+,	INTG_CD_DAT_TP_NM
+,	INTG_CD_TP_CD
+,	INTG_CD_DESC
+,	INTG_CD_NM
+,	INTG_CD_ID
+FROM COM_INTG_CD
+WHERE 1=1
+#if (${intg_cd_id} != '') 
+AND   INTG_CD_ID = @[intg_cd_id]
+#end
+#if (${ownr_sub_sys_cd} != '') 
+AND  UPPER(OWNR_SUB_SYS_CD) like '%'||UPPER(@[ownr_sub_sys_cd])|| '%'
+#end
+			]]></sql>
+			<params>
+				<param name="intg_cd_id" type="12" value="" out="N"/>
+				<param name="ownr_sub_sys_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>
