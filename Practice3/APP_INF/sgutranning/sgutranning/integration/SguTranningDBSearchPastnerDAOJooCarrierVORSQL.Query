@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="SguTranningDBSearchPastnerDAOJooCarrierVORSQL">
+			<desc><![CDATA[search]]></desc>
+			<sql><![CDATA[
+SELECT DISTINCT(JO_CRR_CD)
+FROM JOO_CARRIER			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>

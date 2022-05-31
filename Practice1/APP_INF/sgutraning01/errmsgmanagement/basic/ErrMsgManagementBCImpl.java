@@ -49,9 +49,9 @@ public class ErrMsgManagementBCImpl extends BasicCommandSupport implements ErrMs
 	 * @return List<ErrMsgVO>
 	 * @exception EventException
 	 */
-	public List<ErrMsgVO> SErrMsgVO(ErrMsgVO errMsgVO) throws EventException {
+	public List<ErrMsgVO> searchErrMsgVO(ErrMsgVO errMsgVO) throws EventException {
 		try {
-			return dbDao.SErrMsgVO(errMsgVO);
+			return dbDao.searchErrMsgVO(errMsgVO);
 		} catch(DAOException ex) {
 			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 		} catch (Exception ex) {
@@ -61,8 +61,14 @@ public class ErrMsgManagementBCImpl extends BasicCommandSupport implements ErrMs
 	}
 	public boolean validateErrMsgVO(ErrMsgVO errMsgVO) throws EventException {
 		try {
+//			if(errMsgVO.getErrMsgCd().contains(";")){
+//				String[] insertList = errMsgVO.getErrMsgCd().split(";");
+//		    	for (int i = 0 ; i<insertList.length;i++){
+//		    		
+//		    	}
+//			}
 			if(!dbDao.checkValidateErr(errMsgVO)){
-				throw new DAOException(new ErrorHandler("ERR00001",new String[]{"Master Code"}).getMessage());
+				throw new DAOException(new ErrorHandler("ERR00001").getMessage());
 			}
 			return true;
 		} catch(DAOException ex) {
@@ -81,8 +87,9 @@ public class ErrMsgManagementBCImpl extends BasicCommandSupport implements ErrMs
 	 * @param account SignOnUserAccount
 	 * @exception EventException
 	 */
-	public void MErrMsgVO(ErrMsgVO[] errMsgVO, SignOnUserAccount account) throws EventException{
+	public void manageErrMsgVO(ErrMsgVO[] errMsgVO, SignOnUserAccount account) throws EventException{
 		try {
+			String errMsgFail = "";
 			List<ErrMsgVO> insertVoList = new ArrayList<ErrMsgVO>();
 			List<ErrMsgVO> updateVoList = new ArrayList<ErrMsgVO>();
 			List<ErrMsgVO> deleteVoList = new ArrayList<ErrMsgVO>();
@@ -99,6 +106,17 @@ public class ErrMsgManagementBCImpl extends BasicCommandSupport implements ErrMs
 			}
 			
 			if ( insertVoList.size() > 0 ) {
+				for(int i = 0 ; i < insertVoList.size();i++){
+					if(!dbDao.checkValidateErr(insertVoList.get(i))){
+						errMsgFail +=  insertVoList.get(i).getErrMsgCd();
+					}
+					if(i<insertVoList.size()-1){
+						errMsgFail+=" , ";
+					}
+				}
+				if(errMsgFail!=""){
+					throw new DAOException(new ErrorHandler("ERR00001",new String[]{errMsgFail}).getMessage());
+				}
 				dbDao.addMErrMsgVOS(insertVoList);
 			}
 			

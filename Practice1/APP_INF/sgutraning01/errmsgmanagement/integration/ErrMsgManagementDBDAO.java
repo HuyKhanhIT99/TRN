@@ -47,7 +47,7 @@ public class ErrMsgManagementDBDAO extends DBDAOSupport {
 	 * @exception DAOException
 	 */
 	 @SuppressWarnings("unchecked")
-	public List<ErrMsgVO> SErrMsgVO(ErrMsgVO errMsgVO) throws DAOException {
+	public List<ErrMsgVO> searchErrMsgVO(ErrMsgVO errMsgVO) throws DAOException {
 		DBRowSet dbRowset = null;
 		List<ErrMsgVO> list = null;
 		//query parameter
@@ -74,8 +74,9 @@ public class ErrMsgManagementDBDAO extends DBDAOSupport {
 		return list;
 	}
 	 public boolean checkValidateErr(ErrMsgVO errMsgVO){
+		 errMsgVO.setErrMsg("");
 		 try {
-			List<ErrMsgVO> list = SErrMsgVO(errMsgVO);
+			List<ErrMsgVO> list = searchErrMsgVO(errMsgVO);
 			if(list.size() > 0 ){
 				return false;
 			}

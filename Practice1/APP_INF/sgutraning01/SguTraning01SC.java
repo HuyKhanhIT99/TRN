@@ -12,6 +12,7 @@
 =========================================================*/
 package com.clt.apps.opus.esm.clv.sgutraning01;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.clt.apps.opus.esm.clv.sgutraning01.codemanagement.basic.CodeManagementBC;
@@ -78,20 +79,27 @@ public class SguTraning01SC extends ServiceCommandSupport {
 	 */
 	public EventResponse perform(Event e) throws EventException {
 		// RDTO(Data Transfer Object including Parameters)
+
 		EventResponse eventResponse = null;
 
 		// SC가 여러 이벤트를 처리하는 경우 사용해야 할 부분
 		if (e.getEventName().equalsIgnoreCase("SguTrn0001Event")) {
 			if (e.getFormCommand().isCommand(FormCommand.SEARCH)) {
-				eventResponse = SErrMsgVO(e);
+				eventResponse = searchErrMsgVO(e);
 			}
 			else if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
-				eventResponse = MErrMsgVO(e);
+				eventResponse = manageErrMsgVO(e);
+			}
+			else if (e.getFormCommand().isCommand(FormCommand.SEARCH01)) {
+				eventResponse = checkDuplicated(e);
+			}
+			else if (e.getFormCommand().isCommand(FormCommand.SEARCH02)) {
+				eventResponse = checkServerSide(e);
 			}
 		}
 		if (e.getEventName().equalsIgnoreCase("SguTrn0002Event")) {
 			if (e.getFormCommand().isCommand(FormCommand.SEARCH)) {
-				eventResponse = sMaterVO(e);
+				eventResponse = searchMaterVO(e);
 			}
 			else if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
 				eventResponse = manageCodeMgmt(e);
@@ -99,6 +107,35 @@ public class SguTraning01SC extends ServiceCommandSupport {
 		}
 		return eventResponse;
 	}
+	private EventResponse checkServerSide(Event e) {
+		GeneralEventResponse eventResponse = new GeneralEventResponse();
+		SguTrn0001Event event = (SguTrn0001Event)e;
+		ErrMsgManagementBC command = new ErrMsgManagementBCImpl();
+		try {
+//			ErrMsgVO errmsg = event.getErrMsgVO();
+//			String[] insertList = errmsg.getErrMsgCd().split(";");
+//	    	for (int i = 0 ; i<insertList.length;i++){
+//	    		
+//	    	}
+			command.validateErrMsgVO(event.getErrMsgVO());
+		} catch (EventException e1) {
+			eventResponse.setETCData("duplicated", new ErrorHandler(e1).getUserMessage());
+		}
+		return eventResponse;
+	}
+
+	private EventResponse checkDuplicated(Event e) {
+		GeneralEventResponse eventResponse = new GeneralEventResponse();
+		SguTrn0001Event event = (SguTrn0001Event)e;
+		ErrMsgManagementBC command = new ErrMsgManagementBCImpl();
+		try {
+			command.validateErrMsgVO(event.getErrMsgVO());
+		} catch (EventException e1) {
+			eventResponse.setETCData("duplicated", new ErrorHandler(e1).getUserMessage());
+		}
+		return eventResponse;
+	}
+
 	/**
 	 * SGU_TRN_0001 : [이벤트]<br>
 	 * [비즈니스대상]을 [행위]합니다.<br>
@@ -107,23 +144,17 @@ public class SguTraning01SC extends ServiceCommandSupport {
 	 * @return EventResponse
 	 * @exception EventException
 	 */
-	private EventResponse SErrMsgVO(Event e) throws EventException {
+	private EventResponse searchErrMsgVO(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		SguTrn0001Event event = (SguTrn0001Event)e;
 		ErrMsgManagementBC command = new ErrMsgManagementBCImpl();
 
 		try{
-			if(event.getCheckExistErrMSgCd().equals("check")){
-				command.validateErrMsgVO(event.getErrMsgVO());
-			}else{
-				List<ErrMsgVO> list = command.SErrMsgVO(event.getErrMsgVO());
-				eventResponse.setRsVoList(list);
-			}
-			
+			List<ErrMsgVO> list = command.searchErrMsgVO(event.getErrMsgVO());
+			eventResponse.setRsVoList(list);
 		}catch(EventException ex){
 			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
-//			eventResponse.setETCData("ERR_DUPLICATE",ex.getMessage());
 		}catch(Exception ex){
 			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 		}	
@@ -137,18 +168,19 @@ public class SguTraning01SC extends ServiceCommandSupport {
 	 * @return EventResponse
 	 * @exception EventException
 	 */
-	private EventResponse MErrMsgVO(Event e) throws EventException {
+	private EventResponse manageErrMsgVO(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		SguTrn0001Event event = (SguTrn0001Event)e;
 		ErrMsgManagementBC command = new ErrMsgManagementBCImpl();
 		try{
 			begin();
-			command.MErrMsgVO(event.getErrMsgVOS(),account);
-			eventResponse.setUserMessage(new ErrorHandler("XXXXXXXXX").getUserMessage());
+			command.manageErrMsgVO(event.getErrMsgVOS(),account);
+			//eventResponse.setUserMessage(new ErrorHandler("XXXXXXXXX").getUserMessage());
 			commit();
 		} catch(EventException ex) {
 			rollback();
+			//eventResponse.setETCData("duplicated", new ErrorHandler(ex).getUserMessage());
 			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 		} catch(Exception ex) {
 			rollback();
@@ -157,7 +189,7 @@ public class SguTraning01SC extends ServiceCommandSupport {
 		return eventResponse;
 	}
 	
-	private EventResponse sMaterVO(Event e) throws EventException {
+	private EventResponse searchMaterVO(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		SguTrn0002Event event = (SguTrn0002Event)e;

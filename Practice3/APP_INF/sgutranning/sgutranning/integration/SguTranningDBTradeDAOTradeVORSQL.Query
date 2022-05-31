@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="SguTranningDBTradeDAOTradeVORSQL">
+			<desc><![CDATA[search trade]]></desc>
+			<sql><![CDATA[
+SELECT DISTINCT(TRD_CD)
+FROM JOO_CARRIER
+WHERE JO_CRR_CD IN (#foreach($key IN ${jo_crr_cd})#if($velocityCount < $jo_crr_cd.size()) '$key', #else '$key' #end #end)
+AND RLANE_CD = @[rlane_cd]			]]></sql>
+			<params>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

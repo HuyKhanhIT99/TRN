@@ -34,7 +34,7 @@ public interface ErrMsgManagementBC {
 	 * @return List<ErrMsgVO>
 	 * @exception EventException
 	 */
-	public List<ErrMsgVO> SErrMsgVO(ErrMsgVO errMsgVO) throws EventException;
+	public List<ErrMsgVO> searchErrMsgVO(ErrMsgVO errMsgVO) throws EventException;
 	
 	/**
 	 * [비즈니스대상]을 [행위] 합니다.<br>
@@ -43,7 +43,7 @@ public interface ErrMsgManagementBC {
 	 * @param account SignOnUserAccount
 	 * @exception EventException
 	 */
-	public void MErrMsgVO(ErrMsgVO[] errMsgVO,SignOnUserAccount account) throws EventException;
+	public void manageErrMsgVO(ErrMsgVO[] errMsgVO,SignOnUserAccount account) throws EventException;
 	
 	public boolean validateErrMsgVO(ErrMsgVO errMsgVO) throws EventException;
 }

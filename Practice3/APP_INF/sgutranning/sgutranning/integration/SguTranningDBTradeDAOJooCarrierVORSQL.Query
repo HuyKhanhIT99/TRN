@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="SguTranningDBTradeDAOJooCarrierVORSQL">
+			<desc><![CDATA[Search Trade]]></desc>
+			<sql><![CDATA[
+SELECT DISTINCT(TRD_CD)
+FROM JOO_CARRIER
+WHERE JO_CRR_CD IN (#foreach($key IN ${jo_crr_cd})#if($velocityCount < $jo_crr_cd.size()) '$key', #else '$key' #end #end)
+AND RLANE_CD IN (#foreach($key IN ${rlane_cd})#if($velocityCount < $rlane_cd.size()) '$key', #else '$key' #end #end)			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>
