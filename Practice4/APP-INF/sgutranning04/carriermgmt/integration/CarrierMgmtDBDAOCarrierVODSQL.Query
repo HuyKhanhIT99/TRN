@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCarrierVODSQL">
+			<desc><![CDATA[   ]]></desc>
+			<sql><![CDATA[
+delete from joo_carrier
+where jo_crr_cd = @[jo_crr_cd]
+    and rlane_cd = @[rlane_cd]			]]></sql>
+			<params>
+				<param name="jo_crr_cd" type="12" value="" out="N"/>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCustomerServiceVORSQL">
+			<desc><![CDATA[search customer]]></desc>
+			<sql><![CDATA[
+SELECT
+    mdm_customer.cust_cnt_cd,
+    mdm_customer.cust_seq,
+    mdm_customer.cust_lgl_eng_nm,
+    mdm_customer.cust_abbr_nm,
+    mdm_customer.ofc_cd,
+    mdm_customer.loc_cd
+FROM
+    mdm_customer
+WHERE 1 = 1
+#if (${cust_seq} != '') 
+AND   mdm_customer.cust_seq= @[cust_seq]
+#end
+#if (${cust_cnt_cd} != '') 
+AND  UPPER(mdm_customer.cust_cnt_cd) = UPPER(@[cust_cnt_cd])
+#end
+			]]></sql>
+			<params>
+				<param name="cust_seq" type="12" value="" out="N"/>
+				<param name="cust_cnt_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

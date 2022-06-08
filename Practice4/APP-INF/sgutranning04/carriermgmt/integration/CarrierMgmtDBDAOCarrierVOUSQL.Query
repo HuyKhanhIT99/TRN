@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCarrierVOUSQL">
+			<desc><![CDATA[   ]]></desc>
+			<sql><![CDATA[
+update joo_carrier set
+    vndr_seq = @[vndr_seq], 
+    cust_cnt_cd = @[cust_cnt_cd], 
+    cust_seq = @[cust_seq], 
+    trd_cd = @[trd_cd], 
+    delt_flg = @[delt_flg],
+    upd_dt = sysdate, 
+    upd_usr_id = @[upd_usr_id]
+where jo_crr_cd = @[jo_crr_cd]
+    and rlane_cd = @[rlane_cd]				]]></sql>
+			<params>
+				<param name="vndr_seq" type="12" value="" out="N"/>
+				<param name="cust_cnt_cd" type="12" value="" out="N"/>
+				<param name="cust_seq" type="12" value="" out="N"/>
+				<param name="trd_cd" type="12" value="" out="N"/>
+				<param name="delt_flg" type="12" value="" out="N"/>
+				<param name="upd_usr_id" type="12" value="" out="N"/>
+				<param name="jo_crr_cd" type="12" value="" out="N"/>
+				<param name="rlane_cd" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>

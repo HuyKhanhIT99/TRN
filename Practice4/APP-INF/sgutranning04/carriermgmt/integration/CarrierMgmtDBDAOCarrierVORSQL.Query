@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="CarrierMgmtDBDAOCarrierVORSQL">
+			<desc><![CDATA[search land ]]></desc>
+			<sql><![CDATA[
+SELECT A.JO_CRR_CD						
+     , A.RLANE_CD						
+     , A.VNDR_SEQ						
+     , A.CUST_CNT_CD						
+     , A.CUST_SEQ						
+     , A.TRD_CD						
+     , A.DELT_FLG						
+     , TO_CHAR(A.CRE_DT, 'YYYY/MM/DD HH24:MI:SS') AS CRE_DT						
+     , A.CRE_USR_ID						
+     , TO_CHAR(A.UPD_DT, 'YYYY/MM/DD HH24:MI:SS') AS UPD_DT						
+     , A.UPD_USR_ID						
+  FROM JOO_CARRIER A
+  WHERE 1 = 1
+  #if (${jo_crr_cds}!='' && ${jo_crr_cds} != 'ALL')
+    AND A.JO_CRR_CD    IN ( #foreach($key IN ${jo_crr_cds})#if($velocityCount < $jo_crr_cds.size()) '$key', #else '$key' #end #end)
+  #end
+  #if (${vndr_seq}!='')
+    AND A.VNDR_SEQ = @[vndr_seq]
+  #end	
+  #if (${from_date}!=' ')
+    AND A.CRE_DT >=to_date(@[from_date],'YYYY-MM-DD')
+  #end	
+  #if (${to_date}!=' ')
+    AND A.CRE_DT <= to_date(@[to_date],'YYYY-MM-DD')
+  #end			]]></sql>
+			<params>
+				<param name="vndr_seq" type="12" value="" out="N"/>
+				<param name="from_date" type="12" value="" out="N"/>
+				<param name="to_date" type="12" value="" out="N"/>
+			</params>
+		</query>
+	</querys>
+</sqls>
