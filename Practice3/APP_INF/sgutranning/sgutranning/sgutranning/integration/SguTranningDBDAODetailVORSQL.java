@@ -4,10 +4,10 @@
 *@FileTitle : 
 *Open Issues :
 *Change history :
-*@LastModifyDate : 2022.05.31
+*@LastModifyDate : 2022.06.14
 *@LastModifier : 
 *@LastVersion : 1.0
-* 2022.05.31 
+* 2022.06.14 
 * 1.0 Creation
 =========================================================*/
 package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.integration;
@@ -18,7 +18,7 @@ import com.clt.framework.support.db.ISQLTemplate;
 
 /**
  *
- * @author HUY
+ * @author Huy
  * @see DAO 참조
  * @since J2EE 1.6
  */
@@ -137,8 +137,8 @@ public class SguTranningDBDAODetailVORSQL implements ISQLTemplate{
 		query.append("	WHERE 1=1" ).append("\n"); 
 		query.append("    AND NVL(STL.THEA_STL_FLG, 'N') = 'N'" ).append("\n"); 
 		query.append("	AND INV.ACCT_YRMON   BETWEEN REPLACE(@[fr_acct_yrmon],'-','') AND REPLACE(@[to_acct_yrmon],'-','')" ).append("\n"); 
-		query.append("	#if (${jo_crr_cd}!=''  && ${jo_crr_cd} != 'ALL')" ).append("\n"); 
-		query.append("        AND INV.JO_CRR_CD  IN ( #foreach($key IN ${obj_list_no}) #if($velocityCount < $obj_list_no.size()) '$key', #else '$key' #end #end)" ).append("\n"); 
+		query.append("	 #if (${jo_crr_cds}!=''  && ${jo_crr_cds} != 'ALL')" ).append("\n"); 
+		query.append("        AND INV.JO_CRR_CD    IN ( #foreach($key IN ${jo_crr_cds})#if($velocityCount < $jo_crr_cds.size()) '$key', #else '$key' #end #end)" ).append("\n"); 
 		query.append("	#end" ).append("\n"); 
 		query.append("	#if (${rlane_cd}!='')" ).append("\n"); 
 		query.append("		AND STL.RLANE_CD   = @[rlane_cd]" ).append("\n"); 

@@ -70,8 +70,6 @@
 </script>
 <form name="form">
 	<input type="hidden" name="f_cmd">
-
-	<input type="hidden" name="combobox_name">
 	<input type="hidden" name="pagerows">
 	<!-- page_title_area(S) -->
 	<div class="page_title_area clear">
@@ -104,10 +102,10 @@
 				<tbody>
 					<tr class="h23">
 						<th width="100">Year Month</th>
-						<td width="250"><input type="text" style="width:60px;" class="input1" dataformat="ym" maxlength="6" name="fr_acct_yrmon" value="" id="fr_acct_yrmon" /><!--  
+						<td width="250"><input type="text" style="width:60px;" class="input1" dataformat="ym" maxlength="6" name="fr_acct_yrmon" value="" id="fr_acct_yrmon" readonly/><!--  
 							--><button type="button" class="btn_left" name="btn_from_back" id="btn_vvd_from_back"></button><!--  
 							--><button type="button" class="btn_right" name="btn_from_next" id="btn_vvd_from_next"></button><!--  
-							--><input type="text" style="width:60px;" class="input1" maxlength="6" dataformat="ym" name="to_acct_yrmon" value="" id="to_acct_yrmon" /><!-- 
+							--><input type="text" style="width:60px;" class="input1" maxlength="6" dataformat="ym" name="to_acct_yrmon" value="" id="to_acct_yrmon" readonly /><!-- 
 							--><button type="button" class="btn_left" name="btn_vvd_to_back" id="btn_vvd_to_back"></button><!--  
 							--><button type="button" class="btn_right" name="btn_vvd_to_next" id="btn_vvd_to_next"></button>
 						</td>

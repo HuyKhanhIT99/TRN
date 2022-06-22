@@ -62,7 +62,7 @@ SELECT INV.JO_CRR_CD
 						   AND CRR.DELT_FLG         = 'N'
 						   AND CRR.JO_CRR_CD        = STL.JO_CRR_CD
 						   AND CRR.RLANE_CD         = STL.RLANE_CD
-						   AND CRR.MODI_COST_CTR_CD = @[trd_cd]
+						   AND CRR.TRD_CD = @[trd_cd]
 					 )
 	#end
 

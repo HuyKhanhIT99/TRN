@@ -1,13 +1,13 @@
 /*=========================================================
 *Copyright(c) 2022 CyberLogitec
 *@FileName : SguTranningDBTradeDAOJooCarrierVORSQL.java
-*@FileTitle : aa
+*@FileTitle : ESM_DOU_0108
 *Open Issues :
 *Change history :
-*@LastModifyDate : 2022.05.26
+*@LastModifyDate : 2022.06.14
 *@LastModifier : 
 *@LastVersion : 1.0
-* 2022.05.26 
+* 2022.06.14 
 * 1.0 Creation
 =========================================================*/
 package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.integration;
@@ -18,7 +18,7 @@ import com.clt.framework.support.db.ISQLTemplate;
 
 /**
  *
- * @author HUY
+ * @author Huy
  * @see DAO 참조
  * @since J2EE 1.6
  */

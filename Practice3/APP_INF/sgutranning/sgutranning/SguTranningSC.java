@@ -15,6 +15,9 @@ package com.clt.apps.opus.esm.clv.sgutranning;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clt.apps.opus.esm.clv.downexcelfromserver.downexcelfromserver.basic.DownExcelFromServerBC;
+import com.clt.apps.opus.esm.clv.downexcelfromserver.downexcelfromserver.basic.DownExcelFromServerBCImpl;
+import com.clt.apps.opus.esm.clv.downexcelfromserver.downexcelfromserver.event.DownexcelfromserverEvent;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.basic.SguTranningBC;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.basic.SguTranningBCImpl;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.event.EsmDou0108Event;
@@ -91,8 +94,31 @@ public class SguTranningSC extends ServiceCommandSupport {
 			}
 			else if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
 				eventResponse = manageJooCarrierVO(e);
+			}else if (e.getFormCommand().isCommand(FormCommand.COMMAND01)) {
+				eventResponse = excelDownloadFromServer(e);
 			}
 		}
+		return eventResponse;
+	}
+	private EventResponse excelDownloadFromServer(Event e) throws EventException {
+		SguTranningBC command = new SguTranningBCImpl();
+		EsmDou0108Event event = (EsmDou0108Event)e;
+		GeneralEventResponse eventResponse = new GeneralEventResponse();
+		JooCarrierVO joo = event.getJooCarrierVO();
+		ArrayList<String> jooList = new ArrayList<String>();
+		if(joo.getJoCrrCd().contains(",")){
+			String[] jooCrrCdList = joo.getJoCrrCd().split(",");
+			for(String jooCdId :jooCrrCdList){
+				jooList.add(jooCdId);
+			}
+		}else{
+			jooList.add(joo.getJoCrrCd());
+		}
+		eventResponse.setCustomData("vos", command.searchJooCarrierVO(event.getJooCarrierVO() , jooList, event.getTradeVO()));
+		eventResponse.setCustomData("title", joo.getColumn());
+		eventResponse.setCustomData("columns",joo.getColumn());
+		eventResponse.setCustomData("fileName", "a.xls");
+		eventResponse.setCustomData("isZip", false);
 		return eventResponse;
 	}
 	private EventResponse searchDetail(Event e) {

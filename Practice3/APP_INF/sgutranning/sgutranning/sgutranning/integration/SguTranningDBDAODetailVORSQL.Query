@@ -53,8 +53,8 @@ SELECT INV.JO_CRR_CD
 	WHERE 1=1
     AND NVL(STL.THEA_STL_FLG, 'N') = 'N'
 	AND INV.ACCT_YRMON   BETWEEN REPLACE(@[fr_acct_yrmon],'-','') AND REPLACE(@[to_acct_yrmon],'-','')
-	#if (${jo_crr_cd}!=''  && ${jo_crr_cd} != 'ALL')
-        AND INV.JO_CRR_CD  IN ( #foreach($key IN ${obj_list_no}) #if($velocityCount < $obj_list_no.size()) '$key', #else '$key' #end #end)
+	 #if (${jo_crr_cds}!=''  && ${jo_crr_cds} != 'ALL')
+        AND INV.JO_CRR_CD    IN ( #foreach($key IN ${jo_crr_cds})#if($velocityCount < $jo_crr_cds.size()) '$key', #else '$key' #end #end)
 	#end
 	#if (${rlane_cd}!='')
 		AND STL.RLANE_CD   = @[rlane_cd]
