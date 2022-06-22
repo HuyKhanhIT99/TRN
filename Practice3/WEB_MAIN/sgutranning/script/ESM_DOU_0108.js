@@ -65,7 +65,7 @@ function processButtonClick() {
 				break;
 			//Event fires when user presses following month button 
 			case "btn_from_next":
-				modifyMonth(formObj.fr_acct_yrmon, +1)
+				modifyMonth(formObj.fr_acct_yrmon, 1)
 				break;
 			// For to date
 			// Event fires when user presses previous month button
@@ -74,7 +74,7 @@ function processButtonClick() {
 				break;
 			//Event fires when user presses following month button 
 			case "btn_vvd_to_next":
-				modifyMonth(formObj.to_acct_yrmon, +1)
+				modifyMonth(formObj.to_acct_yrmon, 1)
 				break;
 			// Event fires when New button is clicked, reset form.
 			case "btn_New":
@@ -88,7 +88,6 @@ function processButtonClick() {
 			case "btn_Down":
 				formObj.f_cmd.value = COMMAND01;
 				formObj.action="DownExcelFromServerGS.do";
-				console.log(FormQueryString(formObj));
 				formObj.submit();
 				break;
 
@@ -104,16 +103,16 @@ function processButtonClick() {
 /**
  * the function to get current sheet when user switches tabs 
  */
-function getCurrentSheet() {
-	var sheetObj = null;
-	if (beforetab == 0) {
-		sheetObj = sheetObjects[0];
-	} else {
-		sheetObj = sheetObjects[1];
-	}
-
-	return sheetObj;
-}
+//function getCurrentSheet() {
+//	var sheetObj = null;
+//	if (beforetab == 0) {
+//		sheetObj = sheetObjects[0];
+//	} else {
+//		sheetObj = sheetObjects[1];
+//	}
+//
+//	return sheetObj;
+//}
 /**
  *  This function calls a common function that sets the default settings of the sheet,
  *  It is the first called area when file *jsp onload event.
@@ -138,19 +137,11 @@ function loadPage() {
 	s_rlane_cd.SetEnable(false);
 	s_trd_cd.SetEnable(false);
 	initPeriod();
-	initControl();
 
 	// auto search data after loading finish.
 	doActionIBSheet(sheetObjects[0], document.form, IBSEARCH);
 }
-function initControl(){
-//	document.getElementById('fr_acct_yrmon').addEventListener('keydown', function(e) {
-//		var value=e.target.value
-//		e.target.value=value.removeCharAt(value.length-1);
-//		
-//	});
-//	document.getElementById('s_cre_dt_to').addEventListener('change', function() {excuteCheck();});
-}
+
 /**
  * This function that define the basic properties of the combo.
  * 
@@ -235,7 +226,7 @@ function initSheet(sheetObj) {
 				 * @param MergeSheet:   Is where you can configure merge styles, The default value is: 0 no merge|1 merge for all|5 merge only header.
 				 * @param DataRowMerge: Whether to allow horizontal merge of the entire row, The default value is: 0
 				 * */
-				SetConfig({ SearchMode: 0, MergeSheet: 7, Page: 500, DataRowMerge: 0 });
+				SetConfig({ SearchMode: 0, MergeSheet: 5, Page: 500, DataRowMerge: 0 });
 				/**
 				 * info set information for sheet.
 				 * 
@@ -244,7 +235,7 @@ function initSheet(sheetObj) {
 				 * @param HeaderCheck: Whether the CheckAll in the header is checked, value default: 1 yes|0 no.
 				 * @param ColResize:   Whether to allow resizing of column width, value default: 1 yes| 0 no.
 				 * */
-				var info = { Sort: 0, ColMove: 0, HeaderCheck: 1, ColResize: 0 };
+				var info = { Sort: 0, ColMove: 0, HeaderCheck: 0, ColResize: 0 };
 				var headers = [{ Text: HeadTitle1, Align: "Center" }, { Text: HeadTitle2, Align: "Center" }];
 				/**
 				 * This function define header of Grid, can define the header title and function using this method.
@@ -308,7 +299,7 @@ function initSheet(sheetObj) {
 				 * @param MergeSheet:   Is where you can configure merge styles, The default value is: 0 no merge|1 merge for all|5 merge only header.
 				 * @param DataRowMerge: Whether to allow horizontal merge of the entire row, The default value is: 0
 				 * */
-				SetConfig({ SearchMode: 0, MergeSheet: 5, Page: 500, DataRowMerge: 0 });
+				SetConfig({ SearchMode: 0, MergeSheet: 7, Page: 500, DataRowMerge: 1 });
 				/**
 				 * info set information for sheet.
 				 * 
@@ -340,18 +331,18 @@ function initSheet(sheetObj) {
 				 * @param InsertEdit: Boolean - can be used to configure editable of data the transaction status of which is Insert, value: 1 yes|0 no.
 				 **/
 				var cols = [{ Type: "Status", Hidden: 1, Width: 10, Align: "Center", ColMerge: 0, SaveName: "ibflag", KeyField: 0, CalcLogic: "", Format: "", PointCount: 0, UpdateEdit: 0, InsertEdit: 0 },// 
-				{ Type: "Text", Hidden: 0, Width: 50, Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// partner
-				{ Type: "Text", Hidden: 0, Width: 50, Align: "Center", ColMerge: 0, SaveName: "rlane_cd", KeyField: 1, UpdateEdit: 0, InsertEdit: 0 },//lane
-				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "inv_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//invoice no
-				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "csr_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//slipno
-				{ Type: "Text", Hidden: 0, Width: 70, Align: "Center", ColMerge: 0, SaveName: "apro_flg", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//approved 
-				{ Type: "Text", Hidden: 0, Width: 70, Align: "Center", ColMerge: 0, SaveName: "re_divr_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//rev/exp
-				{ Type: "Text", Hidden: 0, Width: 60, Align: "Center", ColMerge: 0, SaveName: "jo_stl_itm_cd", KeyField:0, UpdateEdit: 0, InsertEdit: 0 },//item
-				{ Type: "Text", Hidden: 0, Width: 40, Align: "Center", ColMerge: 0, SaveName: "locl_curr_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//currency 
-				{ Type: "Float", Hidden: 0, Width: 100, Align: "Right", ColMerge: 0, SaveName: "inv_rev_act_amt", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//revenue
-				{ Type: "Float", Hidden: 0, Width: 100, Align: "Right", ColMerge: 0, SaveName: "inv_exp_act_amt", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//expense	
-				{ Type: "Text", Hidden: 0, Width: 100, Align: "Center", ColMerge: 0, SaveName: "prnr_ref_no", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//code
-				{ Type: "Text", Hidden: 0, Width: 40, Align: "Center", ColMerge: 0, SaveName: "cust_vndr_eng_nm", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }//name	
+				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd",			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// partner
+				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "rlane_cd",			KeyField: 1, UpdateEdit: 0, InsertEdit: 0 },//lane
+				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "inv_no", 			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//invoice no
+				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "csr_no",		 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//slipno
+				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "apro_flg", 			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//approved 
+				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "re_divr_cd", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//rev/exp
+				{ Type: "Text", Hidden: 0, Width: 60,  Align: "Center", ColMerge: 0, SaveName: "jo_stl_itm_cd", 	KeyField:0,  UpdateEdit: 0, InsertEdit: 0 },//item
+				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "locl_curr_cd", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//currency 
+				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_rev_act_amt", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//revenue
+				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_exp_act_amt", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//expense	
+				{ Type: "Text", Hidden: 0, Width: 100, Align: "Center", ColMerge: 0, SaveName: "prnr_ref_no", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//code
+				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "cust_vndr_eng_nm",  KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }//name	
 				];
 				
 				InitColumns(cols);
@@ -377,17 +368,40 @@ function initSheet(sheetObj) {
 	}
 
 }
+
+
 /**
- * 
+ * function fires when user double click at row
  * @param Row: Long - Row index of the cell.
  * @param Col: Long - Column index of the cell.
  * */
 function t1sheet1_OnDblClick(sheetObj, Row, Col) {
-	var dataRows = t1sheet1.GetSelectionRows(",");
-	var inv_no = sheetObj.GetCellValue(Row, "inv_no");
-	tab1_OnChange(tabObjects[1], 1);
-	var x = t2sheet1.FindText(3, inv_no);
-	sheetObjects[1].SetSelectRow(x);
+	var saveNames=["jo_crr_cd","rlane_cd","inv_no","csr_no","locl_curr_cd"];
+	var summaryData=getDataRow(t1sheet1,Row,saveNames);
+	var size=t2sheet1.RowCount();
+	for(var i=0;i<size;i++){
+		console.log(getDataRow(t2sheet1,i,saveNames));
+		if(summaryData==getDataRow(t2sheet1,i,saveNames)){
+			tab1_OnChange(tabObjects[1], 1);
+			sheetObjects[1].SetSelectRow(i);
+			return;
+		}
+	}
+	
+}
+/**
+ * This function is used to get data at row and append that data to string
+ * @param sheetObj: Sheet Objetct
+ * @param row: selected row
+ * @param saveNames: array of save name
+ * @returns data
+ */
+function getDataRow(sheetObj,row,saveNames){
+	var result="";
+	for(var i=0; i<saveNames.length;i++){
+		result+=sheetObj.GetCellValue(row,saveNames[i]);
+	}
+	return result;
 }
 /**
  * This function resize sheet,
@@ -412,7 +426,6 @@ function doActionIBSheet(sheetObj, formObj, sAction) {
 		case IBSEARCH: 
 			formObj.f_cmd.value = SEARCH;
 			ComOpenWait(true);
-			console.log(FormQueryString(formObj));
 			sheetObj.DoSearch("ESM_DOU_0108GS.do", FormQueryString(formObj));
 			formObj.f_cmd.value = SEARCH03;
 			var xml = sheetObjects[1].GetSearchData("ESM_DOU_0108GS.do", FormQueryString(formObj));
