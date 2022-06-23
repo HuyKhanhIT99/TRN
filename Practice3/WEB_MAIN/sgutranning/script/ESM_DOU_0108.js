@@ -35,7 +35,9 @@ var beforetab = 1;
 var laneList = "";
 var check3month = false;
 document.onclick = processButtonClick;
-//handle the click event from jsp button 
+/**
+ * handle the click event from jsp button 
+ */
 function processButtonClick() {
 	var formObj = document.form;
 	try {
@@ -100,19 +102,7 @@ function processButtonClick() {
 		}
 	}
 }
-/**
- * the function to get current sheet when user switches tabs 
- */
-//function getCurrentSheet() {
-//	var sheetObj = null;
-//	if (beforetab == 0) {
-//		sheetObj = sheetObjects[0];
-//	} else {
-//		sheetObj = sheetObjects[1];
-//	}
-//
-//	return sheetObj;
-//}
+
 /**
  *  This function calls a common function that sets the default settings of the sheet,
  *  It is the first called area when file *jsp onload event.
@@ -167,6 +157,8 @@ function initCombo(comboObj, comboNo) {
 }
 /**
  * function that add item to combo box 
+ * @param comboObj 
+ * @param comboItems
  */
 function addComboItem(comboObj, comboItems) {
 	for (var i = 0; i < comboItems.length; i++) {
@@ -464,6 +456,7 @@ function t2sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) {
 }
 /**
  * hightLighting sub/total sum row 
+ * @param sheetObj
  */
 function hightLightSubsumTotalSum(sheetObj) {
 	if (sheetObj.RowCount() > 0) {
@@ -492,7 +485,8 @@ function setTabObject(tab_obj) {
 
 /**
  * init tab object
- * @param @param tab_obj : tab object 
+ * @param tab_obj : tab object 
+ * @param tabNo
  * */
 function initTab(tabObj, tabNo) {
 	switch (tabNo) {
@@ -509,6 +503,8 @@ function initTab(tabObj, tabNo) {
  * Event when clicking Tab
  * activating selected tab items
  * nItem --> the number of tab that user click in
+ * @param tabObj
+ * @param nItem
  */
 function tab1_OnChange(tabObj, nItem) {
 	// it handles the case where there are multiple elements with the same name properly
@@ -531,7 +527,14 @@ function tab1_OnChange(tabObj, nItem) {
 }
 /**
  *  this function handles  data flow for com box of partner
+ *  @param OldText
+ *  @param OldIndex
+ *  @param OldCode
+ *  @param NewIndex
+ *  @param NewCode
+ *  @param NewText
  */  
+
 function s_jo_crr_cd_OnChange(OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) {
 	console.log(NewCode);
 	if ((NewCode.length - 3) >= 0) {
@@ -568,6 +571,12 @@ function s_jo_crr_cd_OnChange(OldText, OldIndex, OldCode, NewText, NewIndex, New
 }
 /**
  *  this function handles  data flow for com box of lane
+ *  @param OldText
+ *  @param OldIndex
+ *  @param OldCode
+ *  @param NewIndex
+ *  @param NewCode
+ *  @param NewText
  */ 
 function s_rlane_cd_OnChange(OldText, OldIndex, OldCode, NewText, NewIndex, NewCode) {
 	if (NewCode.length != 0) {
