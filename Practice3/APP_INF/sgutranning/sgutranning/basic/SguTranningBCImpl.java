@@ -27,7 +27,7 @@ import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
 
 /**
  * ALPS-SguTranning Business Logic Command Interface<br>
- * - ALPS-SguTranning에 대한 비지니스 로직에 대한 인터페이스<br>
+ * - Interface to business logic for ALPS-SguTranning<br>
  *
  * @author HUY
  * @since J2EE 1.6
@@ -44,7 +44,14 @@ public class SguTranningBCImpl extends BasicCommandSupport implements SguTrannin
 		public SguTranningBCImpl() {
 			dbDao = new SguTranningDBDAO();
 		}
-
+		/**
+		 * This method is used for searching summary grid data 
+		 * @param jooCarrierVO
+		 * @param jooList
+		 * @param tradeVO
+		 * @return
+		 * @throws EventException
+		 */
 		@Override
 		public List<JooCarrierVO> searchJooCarrierVO(JooCarrierVO jooCarrierVO, ArrayList<String> jooList,TradeVO tradeVO)
 				throws EventException {
@@ -56,7 +63,11 @@ public class SguTranningBCImpl extends BasicCommandSupport implements SguTrannin
 				throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 			}
 		}
-
+		/**
+		 * This method is used for getting data for partner combo box
+		 * @return List<JooCarrierVO>
+		 * @throws EventException
+		 */
 		@Override
 		public List<JooCarrierVO> searchPartner() throws EventException {
 			try {
@@ -65,27 +76,36 @@ public class SguTranningBCImpl extends BasicCommandSupport implements SguTrannin
 				throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 			}
 		}
-
-		@Override
-		public void multiJooCarrierVO(JooCarrierVO[] jooCarrierVO,
-				SignOnUserAccount account) throws EventException {
-			// TODO Auto-generated method stub
-			
-		}
-
+		/**
+		 * this method is used for getting data for lane combo box 
+		 * @param jooList
+		 * @return List<JooCarrierVO>
+		 */
 		@Override
 		public List<JooCarrierVO> searchLane(ArrayList<String> jooList) {
-			// TODO Auto-generated method stub
-
 			return dbDao.searchLane(jooList);
 		}
 
+		/**
+		 * this method is used to get data for trade combo box  
+		 * @param jooList
+		 * @param rlane
+		 * @return List<TradeVO>
+		 */
 		@Override
 		public List<TradeVO> searchTrade(ArrayList<String> jooList,
 				String rlane) {
 			return dbDao.searchTrade(jooList,rlane);
 		}
 
+		/**
+		 * This method is used for searching detail grid data 
+		 * @param jooCarrierVO
+		 * @param jooList
+		 * @param tradeVO
+		 * @return
+		 * @throws EventException
+		 */
 		@Override
 		public List<DetailVO> searchDeatailVO(JooCarrierVO jooCarrierVO,
 				ArrayList<String> jooList, TradeVO tradeVO) throws EventException {

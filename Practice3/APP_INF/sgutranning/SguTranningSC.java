@@ -15,27 +15,25 @@ package com.clt.apps.opus.esm.clv.sgutranning;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clt.apps.opus.esm.clv.downexcelfromserver.downexcelfromserver.basic.DownExcelFromServerBC;
-import com.clt.apps.opus.esm.clv.downexcelfromserver.downexcelfromserver.basic.DownExcelFromServerBCImpl;
-import com.clt.apps.opus.esm.clv.downexcelfromserver.downexcelfromserver.event.DownexcelfromserverEvent;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.basic.SguTranningBC;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.basic.SguTranningBCImpl;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.event.EsmDou0108Event;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.integration.SguTranningDBDAO;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.DetailVO;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
+import com.clt.framework.component.message.ErrorHandler;
 import com.clt.framework.core.layer.event.Event;
 import com.clt.framework.core.layer.event.EventException;
 import com.clt.framework.core.layer.event.EventResponse;
-import com.clt.framework.component.message.ErrorHandler;
 import com.clt.framework.core.layer.event.GeneralEventResponse;
 import com.clt.framework.support.controller.html.FormCommand;
 import com.clt.framework.support.layer.service.ServiceCommandSupport;
 import com.clt.framework.support.view.signon.SignOnUserAccount;
-import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.DetailVO;
-import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
-import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
 
 
 /**
- * ALPS-SguTranning Business Logic ServiceCommand - ALPS-SguTranning 대한 비지니스 트랜잭션을 처리한다.
+ * ALPS-SguTranning Business Logic ServiceCommand - Process business transaction for ALPS-SguTranning.
  * 
  * @author HUY
  * @see SguTranningDBDAO
@@ -46,14 +44,14 @@ public class SguTranningSC extends ServiceCommandSupport {
 	// Login User Information
 	private SignOnUserAccount account = null;
 
+
 	/**
-	 * SguTranning system 업무 시나리오 선행작업<br>
-	 * 업무 시나리오 호출시 관련 내부객체 생성<br>
-	 */
+	* SguTranning system task scenario precedent work<br>
+	* Creating related internal objects when calling a business scenario<br>
+	*/
 	public void doStart() {
 		log.debug("SguTranningSC 시작");
 		try {
-			// 일단 comment --> 로그인 체크 부분
 			account = getSignOnUserAccount();
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage());
@@ -61,25 +59,25 @@ public class SguTranningSC extends ServiceCommandSupport {
 	}
 
 	/**
-	 * SguTranning system 업무 시나리오 마감작업<br>
-	 * 업무 시나리오 종료시 관련 내부객체 해제<br>
-	 */
+	* SguTranning system work scenario finishing work<br>
+	* Release related internal objects when the work scenario is finished<br>
+	*/
 	public void doEnd() {
 		log.debug("SguTranningSC 종료");
 	}
 
+
 	/**
-	 * 각 이벤트에 해당하는 업무 시나리오 수행<br>
-	 * ALPS-SguTranning system 업무에서 발생하는 모든 이벤트의 분기처리<br>
-	 * 
-	 * @param e Event
-	 * @return EventResponse
-	 * @exception EventException
-	 */
+	* Carry out business scenarios for each event<br>
+	* Branch processing of all events occurring in ALPS-SguTranning system work<br>
+	*
+	* @param e Event
+	* @return EventResponse
+	* @exception EventException
+	*/
 	public EventResponse perform(Event e) throws EventException {
 		// RDTO(Data Transfer Object including Parameters)
 		EventResponse eventResponse = null;
-		// SC가 여러 이벤트를 처리하는 경우 사용해야 할 부분
 		if (e.getEventName().equalsIgnoreCase("EsmDou0108Event")) {
 			if (e.getFormCommand().isCommand(FormCommand.SEARCH)) {
 				eventResponse = searchJooCarrierVO(e);
@@ -91,15 +89,18 @@ public class SguTranningSC extends ServiceCommandSupport {
 				eventResponse = searchTrade(e);
 			}else if (e.getFormCommand().isCommand(FormCommand.SEARCH03)) {
 				eventResponse = searchDetail(e);
-			}
-			else if (e.getFormCommand().isCommand(FormCommand.MULTI)) {
-				eventResponse = manageJooCarrierVO(e);
 			}else if (e.getFormCommand().isCommand(FormCommand.COMMAND01)) {
 				eventResponse = excelDownloadFromServer(e);
 			}
 		}
 		return eventResponse;
 	}
+	/**
+	 * this function is used for downloading data from server side
+	 * @param e
+	 * @return EventResponse
+	 * @throws EventException
+	 */
 	private EventResponse excelDownloadFromServer(Event e) throws EventException {
 		SguTranningBC command = new SguTranningBCImpl();
 		EsmDou0108Event event = (EsmDou0108Event)e;
@@ -121,6 +122,11 @@ public class SguTranningSC extends ServiceCommandSupport {
 		eventResponse.setCustomData("isZip", false);
 		return eventResponse;
 	}
+	/**
+	 * This method is used for searching detail grid data 
+	 * @param e
+	 * @return EventResponse
+	 */
 	private EventResponse searchDetail(Event e) {
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		EsmDou0108Event event = (EsmDou0108Event)e;
@@ -146,13 +152,13 @@ public class SguTranningSC extends ServiceCommandSupport {
 	}
 
 	/**
-	 * ESM_DOU_0108 : [이벤트]<br>
-	 * [비즈니스대상]을 [행위]합니다.<br>
-	 * 
-	 * @param Event e
-	 * @return EventResponse
-	 * @exception EventException
-	 */
+	* ESM_DOU_0108 : [Event]<br>
+	* [Act] for [Business Target].<br>
+	* This method is used for searching summary grid data  
+	* @param Event e
+	* @return EventResponse
+	* @exception EventException
+	*/
 	private EventResponse searchJooCarrierVO(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -179,6 +185,12 @@ public class SguTranningSC extends ServiceCommandSupport {
 		}	
 		return eventResponse;
 	}
+	/**
+	 *  This method is used for searching data for lane combo box
+	 * @param e
+	 * @return EventResponse
+	 * @throws EventException
+	 */
 	private EventResponse searchLane(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -191,7 +203,7 @@ public class SguTranningSC extends ServiceCommandSupport {
 			if(joo.getJoCrrCd().contains(",")){
 				String[] jooCrrCdList = joo.getJoCrrCd().split(",");
 				for(String jooCdId :jooCrrCdList){
-					if(!jooCdId.equals("ALL")){
+					if(!"ALL".equals(jooCdId)){
 						jooList.add(jooCdId);
 					}
 				}
@@ -214,6 +226,12 @@ public class SguTranningSC extends ServiceCommandSupport {
 		}	
 		return eventResponse;
 	}
+	/**
+	 *  This method is used for searching data for trade combo box
+	 * @param e
+	 * @return EventResponse
+	 * @throws EventException
+	 */
 	private EventResponse searchTrade(Event e) throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -249,35 +267,11 @@ public class SguTranningSC extends ServiceCommandSupport {
 		}	
 		return eventResponse;
 	}
-	
-	
 	/**
-	 * ESM_DOU_0108 : [이벤트]<br>
-	 * [비즈니스대상]을 [행위]합니다.<br>
-	 *
-	 * @param Event e
+	 * this function is used for initializing data for partner combo box
 	 * @return EventResponse
-	 * @exception EventException
+	 * @throws EventException
 	 */
-	private EventResponse manageJooCarrierVO(Event e) throws EventException {
-		// PDTO(Data Transfer Object including Parameters)
-		GeneralEventResponse eventResponse = new GeneralEventResponse();
-		EsmDou0108Event event = (EsmDou0108Event)e;
-		SguTranningBC command = new SguTranningBCImpl();
-		try{
-			begin();
-			command.multiJooCarrierVO(event.getJooCarrierVOS(),account);
-			eventResponse.setUserMessage(new ErrorHandler("XXXXXXXXX").getUserMessage());
-			commit();
-		} catch(EventException ex) {
-			rollback();
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
-		} catch(Exception ex) {
-			rollback();
-			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
-		}
-		return eventResponse;
-	}
 	private EventResponse initData() throws EventException {
 		// PDTO(Data Transfer Object including Parameters)
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
@@ -294,7 +288,7 @@ public class SguTranningSC extends ServiceCommandSupport {
 					}	
 				}
 			}
-			eventResponse.setETCData("pastner", pastners.toString());
+			eventResponse.setETCData("partner", pastners.toString());
 		}catch(EventException ex){
 			throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 		}catch(Exception ex){

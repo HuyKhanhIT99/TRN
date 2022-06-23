@@ -32,7 +32,7 @@
 	String successFlag = "";
 	String codeList  = "";
 	String pageRows  = "100";
-	String pastners = "";
+	String partners = "";
 	try {
 		event = (EsmDou0108Event)request.getAttribute("Event");
 		serverException = (Exception)request.getAttribute(CommonWebKeys.EXCEPTION_OBJECT);
@@ -41,13 +41,13 @@
 			strErrMsg = new ErrorHandler(serverException).loadPopupMessage();
 		}
 		GeneralEventResponse eventResponse = (GeneralEventResponse) request.getAttribute("EventResponse");
-		pastners = eventResponse.getETCData("pastner");
+		partners = eventResponse.getETCData("partner");
 	}catch(Exception e) {
 		out.println(e.toString());
 	}
 %>
 <script language="javascript">
-	var pastnerList = "<%=pastners%>";
+	var partnerList = "<%=partners%>";
 	function setupPage() {
 		var errMessage = "<%=strErrMsg%>";
 		if (errMessage.length >= 1) {
@@ -81,7 +81,7 @@
 	<!-- page_title_area(E) -->
 
 	<!-- wrap_search(S) -->
-	<div class="wrap_search">
+	<div class="wrap_search_tab">
 		<!-- opus_design_inquiry(S) -->
 		<div class="opus_design_inquiry wFit">
 			<table>
@@ -125,22 +125,26 @@
 	</div>
 	<!-- wrap_search(E) -->
 
-	<!-- opus_design_grid(S) -->
-	<div class="wrap_result">
-		<!-- layout_wrap(S) -->
-		<div class="layout_wrap">
-			<div class="opus_design_tab">
-				<script language="javascript">ComTabObject('tab1');</script>
-			</div>
-			<!-- opus_design_grid(S) -->
-			<div class="opus_design_grid clear" style="width:98%" name="tabLayer" id="tabLayer">
-				<script type="text/javascript">ComSheetObject('t1sheet1');</script>
-			</div>
-			<div class="opus_design_grid clear" style="width:98%" name="tabLayer" id="tabLayer">
-				<script type="text/javascript">ComSheetObject('t2sheet1');</script>
-			</div>
-			<!-- opus_design_grid(E) -->
-		</div>
-	</div>
-	<!-- wrap_result(E) -->
+	<!-- wrap_result(S) -->
+        <div class="wrap_result">
+            <div class="opus_design_tab">
+                <script type="text/javascript">ComTabObject('tab1')</script>
+            </div>
+            <div class="opus_design_inquiry">
+                <!-- opus_design_grid(S) -->
+                <div class="opus_design_grid" name="tabLayer" id="tabLayer">
+                	<script language="javascript">ComSheetObject('t1sheet1');</script>
+                </div>
+                <!-- opus_design_grid(E) -->
+            </div>
+            
+            <div class="opus_design_inquiry">
+                <!-- opus_design_grid(S) -->
+                <div class="opus_design_grid" name="tabLayer" id="tabLayer">
+                	<script language="javascript">ComSheetObject('t2sheet1');</script>
+                </div>
+                <!-- opus_design_grid(E) -->
+            </div>
+        </div>
+      <!-- wrap_result(E) -->
 </form>

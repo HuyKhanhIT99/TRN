@@ -31,7 +31,7 @@ var comboValues = "";
 var tabObjects = new Array();
 var tabCnt = 0;
 //set this equals to 1 
-var beforetab = 1;
+var beforetab = 0;
 var laneList = "";
 var check3month = false;
 document.onclick = processButtonClick;
@@ -84,7 +84,10 @@ function processButtonClick() {
 				break;
 			// Event fires when DownExcel button is clicked, down sheet to excel file.
 			case "btn_DownExcel":
-				doActionIBSheet(sheetObjects[0], formObj, IBDOWNEXCEL);
+				//doActionIBSheet(sheetObjects[0], formObj, IBDOWNEXCEL);
+				console.log(sheetObjects);
+				console.log(tabObjects);
+				console.log(beforetab);
 				break;
 			// Event fires when DownExcel button is clicked, down sheet to excel file.
 			case "btn_Down":
@@ -148,8 +151,8 @@ function initCombo(comboObj, comboNo) {
 				ValidChar(2, 1);
 			}
 
-			pastnerList = "ALL|" + pastnerList;
-			var comboItems = pastnerList.split("|");
+			partnerList = "ALL|" + partnerList;
+			var comboItems = partnerList.split("|");
 			addComboItem(comboObj, comboItems);
 			comboObj.SetSelectIndex(0, 1, 0, 0);
 			break;
@@ -177,7 +180,7 @@ function addComboItem(comboObj, comboItems) {
  * in case of needing batch processing with other items defining list on the top of source.
  * 
  * @param combo_obj: String - combo object name.
- * */
+ **/
 function setComboObject(combo_obj) {
 	comboObjects[comboCnt++] = combo_obj;
 }
@@ -201,54 +204,12 @@ function initSheet(sheetObj) {
 	switch (sheetObj.id) {
 		case "t1sheet1": // sheet1 init
 			with (sheetObj) {
-				/**
-				 * setting for header
-				 * 
-				 * @param Text:  String of texts to display in header,adjoined by "|"
-				 * @param Align: String How to align header text, value default: "Center"
-				 * */
 				var HeadTitle1 = "|Partner|Lane|Invoice No|Slip No|Approved|Curr.|Revenue|Expense|Customer/S.Provider|Customer/S.Provider|cust_vndr_cnt_cd|cust_vndr_seq";
 				var HeadTitle2 = "|Partner|Lane|Invoice No|Slip No|Approved|Curr.|Revenue|Expense|Code|Name|cust_vndr_cnt_cd|cust_vndr_seq";		
-				/**
-				 * This function SetConfig Configure how to fetch initialized sheet, location of frozen rows or columns and other basic configurations.
-				 * 
-				 * @param SearchMode:   Is where you can configure search mode by selecting one from General, Paging,LazyLoad or real-time server processing modes, 
-				 *                      the default value is: 0 load all data|1 load by page mode|2 is lazy load.
-				 * @param Page:         Number of rows to display in one page (default:20).
-				 * @param MergeSheet:   Is where you can configure merge styles, The default value is: 0 no merge|1 merge for all|5 merge only header.
-				 * @param DataRowMerge: Whether to allow horizontal merge of the entire row, The default value is: 0
-				 * */
 				SetConfig({ SearchMode: 0, MergeSheet: 5, Page: 500, DataRowMerge: 0 });
-				/**
-				 * info set information for sheet.
-				 * 
-				 * @param Sort:        Whether to allow sorting by clicking on the header, value default is: 1 yes|0 no.
-				 * @param ColMove:     Whether to allow column movement in header, value default is: 1 yes|0 no.
-				 * @param HeaderCheck: Whether the CheckAll in the header is checked, value default: 1 yes|0 no.
-				 * @param ColResize:   Whether to allow resizing of column width, value default: 1 yes| 0 no.
-				 * */
 				var info = { Sort: 0, ColMove: 0, HeaderCheck: 0, ColResize: 0 };
 				var headers = [{ Text: HeadTitle1, Align: "Center" }, { Text: HeadTitle2, Align: "Center" }];
-				/**
-				 * This function define header of Grid, can define the header title and function using this method.
-				 * 
-				 * @param headers: Make header list.
-				 * @param info:    Set information for sheet.
-				 * */
 				InitHeaders(headers, info);
-				/**
-				 * configure for each column
-				 * 
-				 * @param Type:       String  - Column data type, this is Required.
-				 * @param Hidden:     Boolean - Whether a column is hidden, value: 1 hide|0 show.
-				 * @param Width:      Number  - Column width.
-				 * @param Align:      String  - Data alignment.
-				 * @param ColMerge:   Boolean - whether to allow vertical merge for data columns, value: 1 yes|0 no.
-				 * @param SaveName:   String  - Can be used to configure the parameter names to use when saving data.
-				 * @param KeyField:   Boolean - Whether to make a data cell a required field, value: 1 required| 0 not required.
-				 * @param UpdateEdit: Boolean - Can be used to configure editable of data the transaction status of which is Search, value: 1 yes|0 no.
-				 * @param InsertEdit: Boolean - can be used to configure editable of data the transaction status of which is Insert, value: 1 yes|0 no.
-				 **/
 				var cols = [
 					{ Type: "Status", Hidden: 1, Width: 0, Align: "Center", ColMerge: 1, SaveName: "ibflag" },
 					{ Type: "Text", Hidden: 0, Width: 50, Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd", KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },
@@ -272,56 +233,14 @@ function initSheet(sheetObj) {
 				//ShowSubSum([{StdCol:3 , SumCols:"7|8",ShowCumulate:0,CaptionText:"",CaptionCol:0}]);
 			}
 			break;
-		case "t2sheet1": // sheet2 init
+		case "t2sheet1": 
 			with (sheetObj) {
-				/**
-				 * setting for header
-				 * 
-				 * @param Text:  String of texts to display in header,adjoined by "|"
-				 * @param Align: String How to align header text, value default: "Center"
-				 * */
 				var HeadTitle1 = "|Partner|Lane|Invoice No|Slip No|Approved|Rev / Exp|Item|Curr.|Revenue|Expense|Customer/S.Provider|Customer/S.Provider";
 				var HeadTitle2 = "|Partner|Lane|Invoice No|Slip No|Approved|Rev / Exp|Item|Curr.|Revenue|Expense|Code|Name";
-				/**
-				 * This function SetConfig Configure how to fetch initialized sheet, location of frozen rows or columns and other basic configurations.
-				 * 
-				 * @param SearchMode:   Is where you can configure search mode by selecting one from General, Paging,LazyLoad or real-time server processing modes, 
-				 *                      the default value is: 0 load all data|1 load by page mode|2 is lazy load.
-				 * @param Page:         Number of rows to display in one page (default:20).
-				 * @param MergeSheet:   Is where you can configure merge styles, The default value is: 0 no merge|1 merge for all|5 merge only header.
-				 * @param DataRowMerge: Whether to allow horizontal merge of the entire row, The default value is: 0
-				 * */
-				SetConfig({ SearchMode: 0, MergeSheet: 7, Page: 500, DataRowMerge: 1 });
-				/**
-				 * info set information for sheet.
-				 * 
-				 * @param Sort:        Whether to allow sorting by clicking on the header, value default is: 1 yes|0 no.
-				 * @param ColMove:     Whether to allow column movement in header, value default is: 1 yes|0 no.
-				 * @param HeaderCheck: Whether the CheckAll in the header is checked, value default: 1 yes|0 no.
-				 * @param ColResize:   Whether to allow resizing of column width, value default: 1 yes| 0 no.
-				 * */
+				SetConfig({ SearchMode: 0, MergeSheet: 5, Page: 500, DataRowMerge: 1 });
 				var info = { Sort: 0, HeaderCheck: 1, ColResize: 0 };
 				var headers = [{ Text: HeadTitle1, Align: "Center" }, { Text: HeadTitle2, Align: "Center" }];
-				/**
-				 * This function define header of Grid, can define the header title and function using this method.
-				 * 
-				 * @param headers: Make header list.
-				 * @param info:    Set information for sheet.
-				 * */
 				InitHeaders(headers, info);
-				/**
-				 * configure for each column
-				 * 
-				 * @param Type:       String  - Column data type, this is Required.
-				 * @param Hidden:     Boolean - Whether a column is hidden, value: 1 hide|0 show.
-				 * @param Width:      Number  - Column width.
-				 * @param Align:      String  - Data alignment.
-				 * @param ColMerge:   Boolean - whether to allow vertical merge for data columns, value: 1 yes|0 no.
-				 * @param SaveName:   String  - Can be used to configure the parameter names to use when saving data.
-				 * @param KeyField:   Boolean - Whether to make a data cell a required field, value: 1 required| 0 not required.
-				 * @param UpdateEdit: Boolean - Can be used to configure editable of data the transaction status of which is Search, value: 1 yes|0 no.
-				 * @param InsertEdit: Boolean - can be used to configure editable of data the transaction status of which is Insert, value: 1 yes|0 no.
-				 **/
 				var cols = [{ Type: "Status", Hidden: 1, Width: 10, Align: "Center", ColMerge: 0, SaveName: "ibflag", KeyField: 0, CalcLogic: "", Format: "", PointCount: 0, UpdateEdit: 0, InsertEdit: 0 },// 
 				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "jo_crr_cd",			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },// partner
 				{ Type: "Text", Hidden: 0, Width: 50,  Align: "Center", ColMerge: 0, SaveName: "rlane_cd",			KeyField: 1, UpdateEdit: 0, InsertEdit: 0 },//lane
@@ -336,23 +255,8 @@ function initSheet(sheetObj) {
 				{ Type: "Text", Hidden: 0, Width: 100, Align: "Center", ColMerge: 0, SaveName: "prnr_ref_no", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//code
 				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "cust_vndr_eng_nm",  KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }//name	
 				];
-				
 				InitColumns(cols);
-				/**
-				 * This function use when you want to define a property of a particular column dynamically, after the property is set in InitColumns Method.
-				 * 
-				 * @param SaveName:           String - Get column name.
-				 * @param AcceptKeys:         String - Accepted key configuration, value E alphabet|N number.
-				 * @param InputCaseSensitive: Number - Whether to use particular case automatically for alphabet inputs, value: 0 no configuration|1 replace with upper case|2 replace with lower case.
-				 * @param ComboText:          String - Combo list text string group.
-				 * @param ComboCode:          String - Combo list code group.
-				 * */
-				SetColProperty(0, "re_divr_cd", { ComboText: "|Rev|Exp", ComboCode: "|R|E", DefaultValue: "R" });
-				//SetCountPosition();
-				/**
-				 * This function Configure overall editable before initial load.
-				 * The value: 1 editable|0 no editable.
-				 * */
+				SetColProperty(0, "re_divr_cd", { ComboText: "|Rev|Exp", ComboCode: "|R|E", DefaultValue: "R" });	
 				SetEditable(1);
 				//ShowSubSum([{StdCol:3 , SumCols:"9|10",ShowCumulate:0,CaptionText:"",CaptionCol:0}]);
 			}
@@ -371,8 +275,8 @@ function t1sheet1_OnDblClick(sheetObj, Row, Col) {
 	var saveNames=["jo_crr_cd","rlane_cd","inv_no","csr_no","locl_curr_cd"];
 	var summaryData=getDataRow(t1sheet1,Row,saveNames);
 	var size=t2sheet1.RowCount();
+	console.log(size);
 	for(var i=0;i<size;i++){
-		console.log(getDataRow(t2sheet1,i,saveNames));
 		if(summaryData==getDataRow(t2sheet1,i,saveNames)){
 			tab1_OnChange(tabObjects[1], 1);
 			sheetObjects[1].SetSelectRow(i);
@@ -381,6 +285,7 @@ function t1sheet1_OnDblClick(sheetObj, Row, Col) {
 	}
 	
 }
+
 /**
  * This function is used to get data at row and append that data to string
  * @param sheetObj: Sheet Objetct
@@ -423,7 +328,7 @@ function doActionIBSheet(sheetObj, formObj, sAction) {
 			var xml = sheetObjects[1].GetSearchData("ESM_DOU_0108GS.do", FormQueryString(formObj));
 			sheetObjects[1].LoadSearchData(xml);
 			break;
-		case IBDOWNEXCEL:	//엑셀다운로드
+		case IBDOWNEXCEL:	
 			if (sheetObj.RowCount() < 1) {
 				ComShowCodeMessage("COM132501");
 			} else {
@@ -505,7 +410,7 @@ function initTab(tabObj, tabNo) {
  * nItem --> the number of tab that user click in
  * @param tabObj
  * @param nItem
- */
+ */ 
 function tab1_OnChange(tabObj, nItem) {
 	// it handles the case where there are multiple elements with the same name properly
 	var objs = document.all.item("tabLayer");

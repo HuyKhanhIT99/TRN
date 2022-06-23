@@ -4,7 +4,7 @@
 *@FileTitle : aa
 *Open Issues :
 *Change history :
-*@LastModifyDate : 2022.05.26
+*@LastModifyDate : 2022.06.23
 *@LastModifier : 
 *@LastVersion : 1.0
 * 2022.05.26 
@@ -14,22 +14,22 @@ package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.event;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
 import com.clt.framework.component.util.JSPUtil;
 import com.clt.framework.core.controller.html.HTMLActionException;
 import com.clt.framework.core.layer.event.Event;
 import com.clt.framework.core.layer.event.EventResponse;
 import com.clt.framework.support.controller.HTMLActionSupport;
 import com.clt.framework.support.controller.html.FormCommand;
-import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
-import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
 
 /**
  * HTTP Parser<br>
- * - com.clt.apps.opus.esm.clv.sgutranning 화면을 통해 서버로 전송되는 HTML DOM 객체의 Value를 자바 변수로 Parsing<br>
- * - Parsing 한 정보를 Event로 변환, request에 담아 SguTranningSC로 실행요청<br>
- * - SguTranningSC에서 View(JSP)로 실행결과를 전송하는 EventResponse를 request에 셋팅<br>
+ * - Parsing the value of the HTML DOM object sent to the server through the com.clt.apps.opus.esm.clv.sgutranning screen as a Java variable<br>
+ * - Parsing information is converted into an event, put in a request, and requested to be executed by SguTranningSC<br>
+ * - EventResponse that transmits execution result from SguTranningSC to View (JSP) is set in the request<br>
  * @author HUY
- * @see SguTranningEvent 참조
+ * @see EsmDou0108Event Reference
  * @since J2EE 1.6
  */
 
@@ -37,15 +37,15 @@ public class ESM_DOU_0108HTMLAction extends HTMLActionSupport {
 
 	private static final long serialVersionUID = 1L;
 	/**
-	 * ESM_DOU_0108HTMLAction 객체를 생성
+	 * ESM_DOU_0108HTMLAction constructor
 	 */
 	public ESM_DOU_0108HTMLAction() {}
 
 	/**
-	 * HTML DOM 객체의 Value를 자바 변수로 Parsing<br>
-	 * HttpRequst의 정보를 SguTranningEvent로 파싱하여 request에 셋팅<br>
+	 * Parsing the HTML DOM object's Value as a Java variable<br>
+	 * Parsing the information of HttpRequst as SguTranningEvent and setting it in the request<br>
 	 * @param request HttpServletRequest HttpRequest
-	 * @return Event Event interface를 구현한 객체
+	 * @return Event Event object that implements the interface
 	 * @exception HTMLActionException
 	 */
 	public Event perform(HttpServletRequest request) throws HTMLActionException {
@@ -53,10 +53,9 @@ public class ESM_DOU_0108HTMLAction extends HTMLActionSupport {
     	FormCommand command = FormCommand.fromRequest(request);
 		EsmDou0108Event event = new EsmDou0108Event();
 		
-		if(command.isCommand(FormCommand.MULTI)) {
-			event.setJooCarrierVOS((JooCarrierVO[])getVOs(request, JooCarrierVO .class,""));
-		}
-		else if(command.isCommand(FormCommand.SEARCH)) {
+		//Check if FormCommand is
+		// SEARCH , we will search data for summary grid 
+		if(command.isCommand(FormCommand.SEARCH)) {
 			JooCarrierVO joo = new JooCarrierVO();
 			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
 			joo.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
@@ -67,16 +66,22 @@ public class ESM_DOU_0108HTMLAction extends HTMLActionSupport {
 			trade.setToAcctYrmon(JSPUtil.getParameter(request, "to_acct_yrmon", ""));
 			event.setJooCarrierVO(joo);
 			event.setTradeVO(trade);
-		}else if(command.isCommand(FormCommand.SEARCH01)) {
+		}
+		// SEARCH01 , we will get data for land combo box 
+		else if(command.isCommand(FormCommand.SEARCH01)) {
 			JooCarrierVO joo = new JooCarrierVO();
 			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
 			event.setJooCarrierVO(joo);
-		}else if(command.isCommand(FormCommand.SEARCH02)){
+		}
+		// SEARCH02 , we will get data for trade combo box
+		else if(command.isCommand(FormCommand.SEARCH02)){
 			JooCarrierVO joo = new JooCarrierVO();
 			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
 			joo.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
 			event.setJooCarrierVO(joo);
-		}else if(command.isCommand(FormCommand.SEARCH03)){
+		}
+		//SEARCH03 , we will search data for detail grid
+		else if(command.isCommand(FormCommand.SEARCH03)){
 			JooCarrierVO joo = new JooCarrierVO();
 			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
 			joo.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
@@ -92,22 +97,22 @@ public class ESM_DOU_0108HTMLAction extends HTMLActionSupport {
 	}
 
 	/**
-	 * HttpRequest의 attribute에 업무시나리오 수행결과 값 저장<br>
-	 * ServiceCommand에서 View(JSP)로 실행결과를 전송하는 ResultSet을 request에 셋팅<br>
+	 * Storing the business scenario execution result value in the attribute of HttpRequest<br>
+	 * Setting the ResultSet that transmits the execution result from ServiceCommand to View (JSP) in the request<br>
 	 * 
 	 * @param request HttpServletRequest HttpRequest
-	 * @param eventResponse EventResponse interface를 구현한 객체
+	 * @param eventResponse An object that implements the EventResponse interface.
 	 */
 	public void doEnd(HttpServletRequest request, EventResponse eventResponse) {
 		request.setAttribute("EventResponse", eventResponse);
 	}
 
 	/**
-	 * HttpRequest의 attribute에 HttpRequest 파싱 수행결과 값 저장<br>
-	 * HttpRequest 파싱 수행결과 값 request에 셋팅<br>
+	 * Saving the HttpRequest parsing result value in the HttpRequest attribute<br>
+	 * HttpRequest parsing result value and set in request<br>
 	 * 
 	 * @param request HttpServletRequest HttpRequest
-	 * @param event Event interface를 구현한 객체
+	 * @param Event An object that implements the Event interface.
 	 */
 	public void doEnd(HttpServletRequest request, Event event) {
 		request.setAttribute("Event", event);

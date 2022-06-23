@@ -4,10 +4,10 @@
 *@FileTitle : 
 *Open Issues :
 *Change history :
-*@LastModifyDate : 2022.06.14
+*@LastModifyDate : 2022.06.23
 *@LastModifier : 
 *@LastVersion : 1.0
-* 2022.06.14 
+* 2022.06.23 
 * 1.0 Creation
 =========================================================*/
 package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.integration;
@@ -150,7 +150,7 @@ public class SguTranningDBDAODetailVORSQL implements ISQLTemplate{
 		query.append("						   AND CRR.DELT_FLG         = 'N'" ).append("\n"); 
 		query.append("						   AND CRR.JO_CRR_CD        = STL.JO_CRR_CD" ).append("\n"); 
 		query.append("						   AND CRR.RLANE_CD         = STL.RLANE_CD" ).append("\n"); 
-		query.append("						   AND CRR.MODI_COST_CTR_CD = @[trd_cd]" ).append("\n"); 
+		query.append("						   AND CRR.TRD_CD = @[trd_cd]" ).append("\n"); 
 		query.append("					 )" ).append("\n"); 
 		query.append("	#end" ).append("\n"); 
 		query.append("    AND INV.RJCT_CMB_FLG  = 'N'" ).append("\n"); 
