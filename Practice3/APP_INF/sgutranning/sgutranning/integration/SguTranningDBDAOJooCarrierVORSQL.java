@@ -4,10 +4,10 @@
 *@FileTitle : 
 *Open Issues :
 *Change history :
-*@LastModifyDate : 2022.06.20
+*@LastModifyDate : 2022.06.23
 *@LastModifier : 
 *@LastVersion : 1.0
-* 2022.06.20 
+* 2022.06.23 
 * 1.0 Creation
 =========================================================*/
 package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.integration;
@@ -171,11 +171,8 @@ public class SguTranningDBDAOJooCarrierVORSQL implements ISQLTemplate{
 		query.append("    ) INV" ).append("\n"); 
 		query.append(" WHERE 1=1" ).append("\n"); 
 		query.append("" ).append("\n"); 
-		query.append(" GROUP BY GROUPING SETS(" ).append("\n"); 
-		query.append("	(INV.JO_CRR_CD, INV.RLANE_CD, INV.LOCL_CURR_CD, INV.INV_NO, INV.CSR_NO, INV.APRO_FLG, INV.CUST_VNDR_CNT_CD, INV.CUST_VNDR_SEQ, INV.PRNR_REF_NO, INV.CUST_VNDR_ENG_NM)" ).append("\n"); 
-		query.append("	,(INV.LOCL_CURR_CD)" ).append("\n"); 
-		query.append("	,(INV.INV_NO)" ).append("\n"); 
-		query.append(")" ).append("\n"); 
+		query.append(" GROUP BY INV.JO_CRR_CD, INV.RLANE_CD, INV.LOCL_CURR_CD, INV.INV_NO, INV.CSR_NO, INV.APRO_FLG, INV.CUST_VNDR_CNT_CD, INV.CUST_VNDR_SEQ, INV.PRNR_REF_NO, INV.CUST_VNDR_ENG_NM" ).append("\n"); 
+		query.append("	" ).append("\n"); 
 		query.append("ORDER BY INV.INV_NO , INV.LOCL_CURR_CD" ).append("\n"); 
 
 	}
