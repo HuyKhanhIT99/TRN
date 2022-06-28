@@ -67,20 +67,28 @@ function processButtonClick() {
 			// For from date	
 			// Event fires when user presses previous month button  
 			case "btn_from_back":
-				modifyMonth(formObj.fr_acct_yrmon, -1)
+				addMonth(formObj.fr_acct_yrmon, -1);
 				break;
 			//Event fires when user presses following month button 
 			case "btn_from_next":
-				modifyMonth(formObj.fr_acct_yrmon, 1)
+				if(!isValidDate()){
+	        		ComShowMessage("Start date must be earlier than end date");
+	            	break;
+	        	}
+	        	addMonth(formObj.fr_acct_yrmon, 1);
 				break;
 			// For to date
 			// Event fires when user presses previous month button
 			case "btn_vvd_to_back":
-				modifyMonth(formObj.to_acct_yrmon, -1)
+				if(!isValidDate()){
+	        		ComShowMessage("Start date must be earlier than end date");
+	            	break;
+	        	}
+	        	addMonth(formObj.to_acct_yrmon, -1);
 				break;
 			//Event fires when user presses following month button 
 			case "btn_vvd_to_next":
-				modifyMonth(formObj.to_acct_yrmon, 1)
+				addMonth(formObj.to_acct_yrmon, 1);
 				break;
 			// Event fires when New button is clicked, reset form.
 			case "btn_New":
@@ -277,7 +285,7 @@ function t1sheet1_OnDblClick(sheetObj, Row, Col) {
 	if(sheetObjects[1].RowCount()==0){
 		doActionIBSheet(sheetObjects[1],document.form,IBSEARCH);
 	}
-	setTimeout(function(){
+//	setTimeout(function(){
 		if(sheetObj.GetCellValue(Row,"jo_crr_cd")!=""){
 			var saveNames=["jo_crr_cd","rlane_cd","inv_no","csr_no","locl_curr_cd","prnr_ref_no"];
 			var summaryData=getDataRow(t1sheet1,Row,saveNames);
@@ -295,7 +303,7 @@ function t1sheet1_OnDblClick(sheetObj, Row, Col) {
 			}
 			ComShowCodeMessage('COM132701');
 		}
-	}, 100);
+//	}, 100);
 	
 }
 
@@ -337,17 +345,23 @@ function doActionIBSheet(sheetObj, formObj, sAction) {
 		case IBSEARCH: 
 			if(sheetObj.id=="t1sheet1"){
 				searchSummary = getSearchOption();
-				formObj.f_cmd.value = SEARCH;-
+				formObj.f_cmd.value = SEARCH;
 				sheetObj.DoSearch("ESM_DOU_0108GS.do", FormQueryString(formObj));
 			}
 			else{
 				searchDetail = getSearchOption();
+//            	formObj.f_cmd.value=SEARCH03;
+//                ComOpenWait(true);
+//                var sXml = sheetObj.GetSearchData("ESM_DOU_0108GS.do", FormQueryString(formObj));
+//                sheetObj.LoadSearchData(sXml, {Sync:1});
+//				searchDetail = getSearchOption();
+//				formObj.f_cmd.value = SEARCH03;
+//				sheetObj.DoSearch("ESM_DOU_0108GS.do", FormQueryString(formObj),{Sync:1});
 				formObj.f_cmd.value = SEARCH03;
-				sheetObj.DoSearch("ESM_DOU_0108GS.do", FormQueryString(formObj));
+				var xml = sheetObjects[1].GetSearchData("ESM_DOU_0108GS.do", FormQueryString(formObj));
+				sheetObjects[1].LoadSearchData(xml,{Sync:1});
 			}
-			/*formObj.f_cmd.value = SEARCH03;
-			var xml = sheetObjects[1].GetSearchData("ESM_DOU_0108GS.do", FormQueryString(formObj));
-			sheetObjects[1].LoadSearchData(xml);*/
+		
 			break;
 		case IBDOWNEXCEL:	
 			if (sheetObj.RowCount() < 1) {
@@ -384,6 +398,7 @@ function t1sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) {
 function t2sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) {
 	ComOpenWait(false);
 	hightLightSubsumTotalSum(sheetObj);
+	totalSum(sheetObj);
 }
 /**
  * hightLighting sub/total sum row 
@@ -597,31 +612,17 @@ function checkOverThreeMonth() {
  * @param obj DATE object 
  * @param iMounth step (nagative: decrement; positive: increment)
  * */
-function modifyMonth(obj, iMonth) {
-	sheetObjects[0].RemoveAll();
-	sheetObjects[1].RemoveAll();
-	var formObj = document.form;
-	var frDt = formObj.fr_acct_yrmon.value.replaceStr("-", "") + "01";
-	var toDt = formObj.to_acct_yrmon.value.replaceStr("-", "") + "01";
-	var modifyDate = obj.value.replaceStr("-", "") + "01";
-	if (ComGetDaysBetween(modifyDate, frDt) == 0) {
-		modifyDate = ComGetDateAdd(obj.value + "-01", "M", iMonth).substring(0, 7);
-		modifyDate = modifyDate.replaceStr("-", "") + "01";
-		if (ComGetDaysBetween(modifyDate, toDt) <= 0) {
-			ComShowCodeMessage("COM132002");
-			return false;
-		}
-	} else if (ComGetDaysBetween(modifyDate, toDt) == 0) {
-		modifyDate = ComGetDateAdd(obj.value + "-01", "M", iMonth).substring(0, 7);
-		modifyDate = modifyDate.replaceStr("-", "") + "01";
-		
-		if (ComGetDaysBetween(modifyDate, frDt) >= 0) {
-			ComShowCodeMessage("COM132002");
-			return false;
-		}
+
+function isValidDate(){
+	var from=new Date(document.form.fr_acct_yrmon.value);
+	var to = new Date(document.form.to_acct_yrmon.value);
+	return from < to;
+}
+
+function addMonth(obj, month){
+	if (obj.value != ""){
+			obj.value = ComGetDateAdd(obj.value + "-01", "M", month).substr(0,7);
 	}
-	obj.value = ComGetDateAdd(obj.value + "-01", "M", iMonth).substring(0, 7);
-	return true;
 }
 /**
  * This function will delete the values ​​in the input and the Grid that are displayed in the UI when click new button.
@@ -652,28 +653,26 @@ function totalSum(sheetObj){
 	var arrSubsum = subsum.split("|");
 	for (var i = 0; i < arrSubsum.length; i++) {
 		if(sheetObj.GetCellValue(arrSubsum[i],"locl_curr_cd")=="VND"){
-			totalVND+=sheetObj.GetCellValue(arrSubsum[i],7);
-			totalVND1+=sheetObj.GetCellValue(arrSubsum[i],8);
+			totalVND+=sheetObj.GetCellValue(arrSubsum[i],"inv_rev_act_amt");
+			totalVND1+=sheetObj.GetCellValue(arrSubsum[i],"inv_exp_act_amt");
 		}else{
-			totalUSD+=sheetObj.GetCellValue(arrSubsum[i],7);
-			totalUSD1+=sheetObj.GetCellValue(arrSubsum[i],8);
+			totalUSD+=sheetObj.GetCellValue(arrSubsum[i],"inv_rev_act_amt");
+			totalUSD1+=sheetObj.GetCellValue(arrSubsum[i],"inv_exp_act_amt");
 		}	
 	}
 	sheetObj.DataInsert(-1);
 	sheetObj.SetCellValue(sheetObj.LastRow(),"locl_curr_cd","VND");
-	sheetObj.SetCellValue(sheetObj.LastRow(),7,totalVND);
-	sheetObj.SetCellValue(sheetObj.LastRow(),8,totalVND1);
+	sheetObj.SetCellValue(sheetObj.LastRow(),"inv_rev_act_amt",totalVND);
+	sheetObj.SetCellValue(sheetObj.LastRow(),"inv_exp_act_amt",totalVND1);
 	sheetObj.SetRangeFontBold(sheetObj.LastRow(), 1, i, 10, 1);
 	sheetObj.SetRowBackColor(sheetObj.LastRow(), "#ff9933");
 	sheetObj.DataInsert(-1);
 	sheetObj.SetCellValue(sheetObj.LastRow(),"locl_curr_cd","USD");
-	sheetObj.SetCellValue(sheetObj.LastRow(),7,totalUSD);
-	sheetObj.SetCellValue(sheetObj.LastRow(),8,totalUSD1);
+	sheetObj.SetCellValue(sheetObj.LastRow(),"inv_rev_act_amt",totalUSD);
+	sheetObj.SetCellValue(sheetObj.LastRow(),"inv_exp_act_amt",totalUSD1);
 	sheetObj.SetRangeFontBold(sheetObj.LastRow(), 1, i, 10, 1);
 	sheetObj.SetRowBackColor(sheetObj.LastRow(), "#ff9933"); 	
-	
-	
-	hightLightSubsumTotalSum(sheetObj);
+//	sheetObj.SetSelectRow(3);
 	
 }
 o
@@ -686,14 +685,7 @@ function handleOnchangeTab(){
 	var currentSheet=getCurrentSheet();
 	var formQuery = getSearchOption();
 
-	if(searchSummary!=formQuery&&searchSummary!=searchDetail){
-		if (confirm("Search data was changed. Do you want to retrieve?")) {
-			doActionIBSheet(currentSheet,document.form,IBSEARCH);
-		} else {
-			return;
-		}
-	}
-	if(searchSummary==searchDetail&&searchSummary!=formQuery){
+	if(searchSummary!=formQuery&&formQuery!=searchDetail){
 		if (confirm("Search data was changed. Do you want to retrieve?")) {
 			doActionIBSheet(currentSheet,document.form,IBSEARCH);
 		} else {
@@ -702,12 +694,10 @@ function handleOnchangeTab(){
 	}
 	if(currentSheet.id=="t1sheet1"){//dang o summary
 		if(searchSummary!=formQuery){
-			searchSummary=formQuery;
 			doActionIBSheet(currentSheet, document.form, IBSEARCH)
 		}
 	}else{
 		if(searchDetail!=formQuery){
-			searchDetail=formQuery
 			doActionIBSheet(currentSheet, document.form, IBSEARCH)
 		}
 	}
