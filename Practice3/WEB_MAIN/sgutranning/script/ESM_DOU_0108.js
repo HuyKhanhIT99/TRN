@@ -31,6 +31,8 @@ var comboCnt = 0;
 var comboValues = "";
 var searchSummary = "";
 var searchDetail = "";
+var searchOption4Dbl="";
+var isDbl = false ;
 var firstLoad = true;
 var tabObjects = new Array();
 var tabCnt = 0;
@@ -257,8 +259,8 @@ function initSheet(sheetObj) {
 				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "inv_no", 			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//invoice no
 				{ Type: "Text", Hidden: 0, Width: 150, Align: "Center", ColMerge: 0, SaveName: "csr_no",		 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//slipno
 				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "apro_flg", 			KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//approved 
-				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "re_divr_cd", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//rev/exp
-				{ Type: "Text", Hidden: 0, Width: 60,  Align: "Center", ColMerge: 0, SaveName: "jo_stl_itm_cd", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//item
+				{ Type: "Text", Hidden: 0, Width: 70,  Align: "Center", ColMerge: 0, SaveName: "rev_exp", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//rev/exp
+				{ Type: "Text", Hidden: 0, Width: 60,  Align: "Center", ColMerge: 0, SaveName: "item", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//item
 				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "locl_curr_cd", 		KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//currency 
 				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_rev_act_amt", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//revenue
 				{ Type: "Float",Hidden: 0, Width: 100, Align: "Right",  ColMerge: 0, SaveName: "inv_exp_act_amt", 	KeyField: 0, UpdateEdit: 0, InsertEdit: 0 },//expense	
@@ -266,7 +268,7 @@ function initSheet(sheetObj) {
 				{ Type: "Text", Hidden: 0, Width: 40,  Align: "Center", ColMerge: 0, SaveName: "cust_vndr_eng_nm",  KeyField: 0, UpdateEdit: 0, InsertEdit: 0 }//name	
 				];
 				InitColumns(cols);
-				SetColProperty(0, "re_divr_cd", { ComboText: "|Rev|Exp", ComboCode: "|R|E", DefaultValue: "R" });	
+				SetColProperty(0, "rev_exp", { ComboText: "|Rev|Exp", ComboCode: "|R|E", DefaultValue: "R" });	
 				SetEditable(1);
 				ShowSubSum([{StdCol:"inv_no" , SumCols:"9|10",ShowCumulate:0,CaptionText:"",CaptionCol:3}]);
 			}
@@ -282,22 +284,31 @@ function initSheet(sheetObj) {
  * @param Col: Long - Column index of the cell.
  * */
 function t1sheet1_OnDblClick(sheetObj, Row, Col) {
+	formObj = document.form;
 	if(sheetObjects[1].RowCount()==0){
-		doActionIBSheet(sheetObjects[1],document.form,IBSEARCH);
+//		doActionIBSheet(sheetObjects[1],document.form,IBSEARCH);
+		formObj.f_cmd.value = SEARCH03;
+		var xml = sheetObjects[1].GetSearchData("ESM_DOU_0108GS.do", searchOption4Dbl);
+		sheetObjects[1].LoadSearchData(xml,{Sync:1});
+	}else if (sheetObjects[1].RowCount()>0 &&searchOption4Dbl != getSearchOption() ){
+		formObj.f_cmd.value = SEARCH03;
+		var xml = sheetObjects[1].GetSearchData("ESM_DOU_0108GS.do", searchOption4Dbl);
+		sheetObjects[1].LoadSearchData(xml,{Sync:1});
 	}
+	isDbl=true;
 //	setTimeout(function(){
 		if(sheetObj.GetCellValue(Row,"jo_crr_cd")!=""){
 			var saveNames=["jo_crr_cd","rlane_cd","inv_no","csr_no","locl_curr_cd","prnr_ref_no"];
 			var summaryData=getDataRow(t1sheet1,Row,saveNames);
-			console.log(summaryData);
+//			console.log(summaryData);
 			var size=t2sheet1.RowCount();
 			for(var i=2;i<=size;i++){
-				console.log(getDataRow(t2sheet1,i,saveNames));
+//				console.log(getDataRow(t2sheet1,i,saveNames));
 				if(summaryData==getDataRow(t2sheet1,i,saveNames)){
-					
-					tab1_OnChange(tabObjects[1], 1);
+//					tab1_OnChange(tabObjects[1], 1);
+					tabObjects[0].SetSelectedIndex(1);
 					sheetObjects[1].SetSelectRow(i);
-//					console.log('row '+i);
+					isDbl=false;
 					return;
 				}
 			}
@@ -385,7 +396,8 @@ function t1sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) {
 	ComOpenWait(false);
 	//sheetObj.ShowSubSum([{StdCol:"locl_curr_cd" , SumCols:"7|8",ShowCumulate:0,CaptionText:"",CaptionCol:3}]);
 	hightLightSubsumTotalSum(sheetObj);
-	totalSum(sheetObj);
+	searchOption4Dbl = FormQueryString(document.form);
+	//totalSum(sheetObj);
 //	sheetObj.DataInsert(-1);
 //	sheetObj.SetCellValue(sheetObj.LastRow(),"locl_curr_cd","VND");
 	//sheetObj.SetRowHidden(sheetObj.LastRow(),1);
@@ -398,7 +410,7 @@ function t1sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) {
 function t2sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) {
 	ComOpenWait(false);
 	hightLightSubsumTotalSum(sheetObj);
-	totalSum(sheetObj);
+	//totalSum(sheetObj);
 }
 /**
  * hightLighting sub/total sum row 
@@ -406,12 +418,16 @@ function t2sheet1_OnSearchEnd(sheetObj, Code, Msg, StCode, StMsg) {
  */
 function hightLightSubsumTotalSum(sheetObj) {
 	if (sheetObj.RowCount() > 0) {
+		sheetObj.SetRowHidden(sheetObj.LastRow(),1);
 		for (var i = sheetObj.HeaderRows(); i <= sheetObj.LastRow(); i++) {
 			if (sheetObj.GetCellValue(i, "jo_crr_cd") == '') {
 				if (sheetObj.GetCellValue(i, "inv_no") != '') {
 					sheetObj.SetCellValue(i, "inv_no", "");
 					sheetObj.SetCellValue(i, "locl_curr_cd", sheetObj.GetCellValue(i-1, "locl_curr_cd"));
 					
+				}else{
+					sheetObj.SetRangeFontBold(i, 1, i, 10, 1);
+					sheetObj.SetRowBackColor(i, "#ff9933");
 				} 
 			}
 		}
@@ -466,7 +482,8 @@ function tab1_OnChange(tabObj, nItem) {
 	beforetab = nItem;
 
 	tab1.SetSelectedIndex(beforetab)
-	handleOnchangeTab();
+
+	isDbl?isDbl = false:handleOnchangeTab();
 	resizeSheet();
 }
 /**
@@ -570,7 +587,7 @@ function initPeriod() {
 	var formObj = document.form;
 	var ymTo = ComGetNowInfo("ym", "-");
 	formObj.to_acct_yrmon.value = ymTo;
-	var ymFrom = ComGetDateAdd(formObj.to_acct_yrmon.value + "-01", "M", -2);
+	var ymFrom = ComGetDateAdd(formObj.to_acct_yrmon.value + "-01", "M", -1);
 	formObj.fr_acct_yrmon.value = getDateFormat(ymFrom, "ym");
 }
 /**
@@ -675,7 +692,7 @@ function totalSum(sheetObj){
 //	sheetObj.SetSelectRow(3);
 	
 }
-o
+
 function handleOnchangeTab(){
 	if(firstLoad) {
 		firstLoad=false;
@@ -713,6 +730,11 @@ function getSearchOption(){
 				+formObject.s_jo_crr_cd.value+formObject.s_rlane_cd.value+formObject.s_trd_cd.value
 	return searchOptionString;
 }
-function isSameSeairchOption(){
-	return searchDetail==searchSummary;
+function t1sheet1_OnDownFinish(downloadType, result) {
+	ComOpenWait(false);
+	if (!result) {
+		ComShowCodeMessage("COM131102", "data");
+	} else {
+		ComShowCodeMessage("COM131101", "data");
+	}
 }

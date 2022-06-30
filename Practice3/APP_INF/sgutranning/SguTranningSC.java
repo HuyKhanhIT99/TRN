@@ -106,16 +106,7 @@ public class SguTranningSC extends ServiceCommandSupport {
 		EsmDou0108Event event = (EsmDou0108Event)e;
 		GeneralEventResponse eventResponse = new GeneralEventResponse();
 		JooCarrierVO joo = event.getJooCarrierVO();
-		ArrayList<String> jooList = new ArrayList<String>();
-		if(joo.getJoCrrCd().contains(",")){
-			String[] jooCrrCdList = joo.getJoCrrCd().split(",");
-			for(String jooCdId :jooCrrCdList){
-				jooList.add(jooCdId);
-			}
-		}else{
-			jooList.add(joo.getJoCrrCd());
-		}
-		eventResponse.setCustomData("vos", command.searchJooCarrierVO(event.getJooCarrierVO() , jooList, event.getTradeVO()));
+		eventResponse.setCustomData("vos", command.searchJooCarrierVO(event.getCondition()));
 		eventResponse.setCustomData("title", joo.getColumn());
 		eventResponse.setCustomData("columns",joo.getColumn());
 		eventResponse.setCustomData("fileName", "a.xls");
@@ -133,17 +124,7 @@ public class SguTranningSC extends ServiceCommandSupport {
 		SguTranningBC command = new SguTranningBCImpl();
 
 		try{
-			JooCarrierVO joo = event.getJooCarrierVO();
-			ArrayList<String> jooList = new ArrayList<String>();
-			if(joo.getJoCrrCd().contains(",")){
-				String[] jooCrrCdList = joo.getJoCrrCd().split(",");
-				for(String jooCdId :jooCrrCdList){
-					jooList.add(jooCdId);
-				}
-			}else{
-				jooList.add(joo.getJoCrrCd());
-			}
-			List<DetailVO> list = command.searchDeatailVO(event.getJooCarrierVO() , jooList, event.getTradeVO());
+			List<DetailVO> list = command.searchDeatailVO(event.getCondition());
 			eventResponse.setRsVoList(list);
 		}catch(EventException ex){
 		}catch(Exception ex){
@@ -166,17 +147,7 @@ public class SguTranningSC extends ServiceCommandSupport {
 		SguTranningBC command = new SguTranningBCImpl();
 
 		try{
-			JooCarrierVO joo = event.getJooCarrierVO();
-			ArrayList<String> jooList = new ArrayList<String>();
-			if(joo.getJoCrrCd().contains(",")){
-				String[] jooCrrCdList = joo.getJoCrrCd().split(",");
-				for(String jooCdId :jooCrrCdList){
-					jooList.add(jooCdId);
-				}
-			}else{
-				jooList.add(joo.getJoCrrCd());
-			}
-			List<JooCarrierVO> list = command.searchJooCarrierVO(event.getJooCarrierVO() , jooList, event.getTradeVO());
+			List<JooCarrierVO> list = command.searchJooCarrierVO(event.getCondition());
 			eventResponse.setRsVoList(list);
 		}catch(EventException ex){
 			throw new EventException(new ErrorHandler(ex).getMessage(),ex);

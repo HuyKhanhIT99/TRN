@@ -13,7 +13,7 @@
 package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.event;
 
 import com.clt.framework.support.layer.event.EventSupport;
-import com.clt.apps.opus.esm.clv.downexcelfromserver.downexcelfromserver.vo.JooCarrierVO;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
 
 

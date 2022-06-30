@@ -15,6 +15,7 @@ package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.ConditionVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.DetailVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
@@ -35,7 +36,7 @@ public interface SguTranningBC {
 	 * @return
 	 * @throws EventException
 	 */
-	public List<JooCarrierVO> searchJooCarrierVO(JooCarrierVO jooCarrierVO, ArrayList<String> jooList, TradeVO tradeVO) throws EventException;
+	public List<JooCarrierVO> searchJooCarrierVO(ConditionVO condition)throws EventException;
 	/**
 	 * This method is used for getting data for partner combo box
 	 * @return List<JooCarrierVO>
@@ -63,5 +64,6 @@ public interface SguTranningBC {
 	 * @return
 	 * @throws EventException
 	 */
-	public List<DetailVO> searchDeatailVO(JooCarrierVO jooCarrierVO, ArrayList<String> jooList, TradeVO tradeVO) throws EventException;
+	
+	public List<DetailVO> searchDeatailVO(ConditionVO condition)throws EventException;
 }

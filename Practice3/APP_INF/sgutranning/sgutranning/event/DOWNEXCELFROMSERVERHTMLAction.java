@@ -20,6 +20,7 @@ import com.clt.framework.core.layer.event.Event;
 import com.clt.framework.core.layer.event.EventResponse;
 import com.clt.framework.support.controller.HTMLActionSupport;
 import com.clt.framework.support.controller.html.FormCommand;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.ConditionVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
 
@@ -53,16 +54,18 @@ public class DOWNEXCELFROMSERVERHTMLAction extends HTMLActionSupport {
     	FormCommand command = FormCommand.fromRequest(request);
 		EsmDou0108Event event = new EsmDou0108Event();
 		if(command.isCommand(FormCommand.COMMAND01)) {
-			JooCarrierVO joo = new JooCarrierVO();
-			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
-			joo.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
-			TradeVO trade = new TradeVO();
-			String a =JSPUtil.getParameter(request, "s_trd_cd", "");
-			trade.setTrdCd(a);
-			trade.setFrAcctYrmon(JSPUtil.getParameter(request, "fr_acct_yrmon", ""));
-			trade.setToAcctYrmon(JSPUtil.getParameter(request, "to_acct_yrmon", ""));
-			event.setJooCarrierVO(joo);
-			event.setTradeVO(trade);
+			ConditionVO conditionVO = (ConditionVO)getVO(request, ConditionVO .class,"");
+			event.setCondition(conditionVO);
+//			JooCarrierVO joo = new JooCarrierVO();
+//			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
+//			joo.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
+//			TradeVO trade = new TradeVO();
+//			String a =JSPUtil.getParameter(request, "s_trd_cd", "");
+//			trade.setTrdCd(a);
+//			trade.setFrAcctYrmon(JSPUtil.getParameter(request, "fr_acct_yrmon", ""));
+//			trade.setToAcctYrmon(JSPUtil.getParameter(request, "to_acct_yrmon", ""));
+//			event.setJooCarrierVO(joo);
+//			event.setTradeVO(trade);
 		}
 		return  event;
 	}

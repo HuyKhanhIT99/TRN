@@ -21,6 +21,7 @@ import com.clt.framework.core.layer.event.EventException;
 import com.clt.framework.core.layer.integration.DAOException;
 import com.clt.framework.support.layer.basic.BasicCommandSupport;
 import com.clt.framework.support.view.signon.SignOnUserAccount;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.ConditionVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.DetailVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
@@ -53,10 +54,18 @@ public class SguTranningBCImpl extends BasicCommandSupport implements SguTrannin
 		 * @throws EventException
 		 */
 		@Override
-		public List<JooCarrierVO> searchJooCarrierVO(JooCarrierVO jooCarrierVO, ArrayList<String> jooList,TradeVO tradeVO)
-				throws EventException {
+		public List<JooCarrierVO> searchJooCarrierVO(ConditionVO condition) throws EventException{
 			try {
-				return dbDao.searchJooCarrierVO(jooCarrierVO,jooList,tradeVO);
+				ArrayList<String> jooList = new ArrayList<String>();
+				if(condition.getJoCrrCd().contains(",")){
+					String[] jooCrrCdList =condition.getJoCrrCd().split(",");
+					for(String jooCdId :jooCrrCdList){
+						jooList.add(jooCdId);
+					}
+				}else{
+					jooList.add(condition.getJoCrrCd());
+				}
+				return dbDao.searchJooCarrierVO(condition , jooList);
 			} catch(DAOException ex) {
 				throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 			} catch (Exception ex) {
@@ -107,15 +116,24 @@ public class SguTranningBCImpl extends BasicCommandSupport implements SguTrannin
 		 * @throws EventException
 		 */
 		@Override
-		public List<DetailVO> searchDeatailVO(JooCarrierVO jooCarrierVO,
-				ArrayList<String> jooList, TradeVO tradeVO) throws EventException {
+		public List<DetailVO> searchDeatailVO(ConditionVO condition)
+				throws EventException {
 			try {
-				return dbDao.searchDetailVO(jooCarrierVO,jooList,tradeVO);
+				ArrayList<String> jooList = new ArrayList<String>();
+				if(condition.getJoCrrCd().contains(",")){
+					String[] jooCrrCdList =condition.getJoCrrCd().split(",");
+					for(String jooCdId :jooCrrCdList){
+						jooList.add(jooCdId);
+					}
+				}else{
+					jooList.add(condition.getJoCrrCd());
+				}
+				return dbDao.searchDetailVO(condition , jooList);
 			} catch(DAOException ex) {
 				throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 			} catch (Exception ex) {
 				throw new EventException(new ErrorHandler(ex).getMessage(),ex);
 			}
 		}
-	
+
 }

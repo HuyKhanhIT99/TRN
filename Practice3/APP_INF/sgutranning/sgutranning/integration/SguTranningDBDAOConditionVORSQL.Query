@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+	<querys>
+		<query name="SguTranningDBDAOConditionVORSQL">
+			<desc><![CDATA[sad]]></desc>
+			<sql><![CDATA[
+SELECT 
+	TRD_CD
+,	RLANE_CD
+,	JO_CRR_CD
+FROM JOO_CARRIER			]]></sql>
+			<params>
+			</params>
+		</query>
+	</querys>
+</sqls>

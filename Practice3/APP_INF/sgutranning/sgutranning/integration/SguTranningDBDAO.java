@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.basic.SguTranningBCImpl;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.ConditionVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.DetailVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
@@ -50,7 +51,8 @@ public class SguTranningDBDAO extends DBDAOSupport {
 	 * @throws DAOException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<JooCarrierVO> searchJooCarrierVO(JooCarrierVO jooCarrierVO, ArrayList<String> jooList, TradeVO tradeVO)
+	public List<JooCarrierVO> searchJooCarrierVO(ConditionVO condition,
+			ArrayList<String> jooList)
 			throws DAOException {
 		DBRowSet dbRowset = null;
 		List<JooCarrierVO> list = null;
@@ -60,31 +62,19 @@ public class SguTranningDBDAO extends DBDAOSupport {
 		Map<String, Object> velParam = new HashMap<String, Object>();
 		
 		try {
-			if(!"ALL".equals(jooCarrierVO.getJoCrrCd())){
+			if(condition != null){
+				Map<String, String> mapVO = condition .getColumnValues();
+			
+				param.putAll(mapVO);
+				velParam.putAll(mapVO);
+			}
+			if(!"ALL".equals(condition.getJoCrrCd())){
 				velParam.put("jo_crr_cds", jooList);
 				param.put("jo_crr_cds", "ALL");
 			}else{
 				velParam.put("jo_crr_cds", "ALL");
 				param.put("jo_crr_cds", "ALL");
 			}
-			if(jooCarrierVO.getRlaneCd().isEmpty()){
-				param.put("rlane_cd", "");
-				velParam.put("rlane_cd", "");
-			}else{
-				param.put("rlane_cd", jooCarrierVO.getRlaneCd());
-				velParam.put("rlane_cd", jooCarrierVO.getRlaneCd());
-			}
-			if(tradeVO.getTrdCd().isEmpty()){
-				param.put("trd_cd", "");
-				velParam.put("trd_cd", "");
-			}else{
-				param.put("trd_cd", tradeVO.getTrdCd());
-				velParam.put("trd_cd", tradeVO.getTrdCd());
-			}
-			param.put("fr_acct_yrmon",tradeVO.getFrAcctYrmon());
-			param.put("to_acct_yrmon",tradeVO.getToAcctYrmon());
-			velParam.put("fr_acct_yrmon", tradeVO.getFrAcctYrmon());
-			velParam.put("to_acct_yrmon", tradeVO.getToAcctYrmon());
 			dbRowset = new SQLExecuter("").executeQuery((ISQLTemplate) new SguTranningDBDAOJooCarrierVORSQL(),param, velParam);
 			list = (List) RowSetUtil.rowSetToVOs(dbRowset, JooCarrierVO.class);
 		} catch (SQLException se) {
@@ -96,6 +86,7 @@ public class SguTranningDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
+
 
 	/**
 	 * This method is used for getting data for partner combo box
@@ -193,8 +184,8 @@ public class SguTranningDBDAO extends DBDAOSupport {
 	 * @throws EventException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<DetailVO> searchDetailVO(JooCarrierVO jooCarrierVO,
-			ArrayList<String> jooList, TradeVO tradeVO) throws DAOException {
+	public List<DetailVO> searchDetailVO(ConditionVO condition,
+			ArrayList<String> jooList) throws DAOException{
 		DBRowSet dbRowset = null;
 		List<DetailVO> list = null;
 		// query parameter
@@ -203,31 +194,19 @@ public class SguTranningDBDAO extends DBDAOSupport {
 		Map<String, Object> velParam = new HashMap<String, Object>();
 		
 		try {
-			if(!"ALL".equals(jooCarrierVO.getJoCrrCd())){
+			if(condition != null){
+				Map<String, String> mapVO = condition .getColumnValues();
+			
+				param.putAll(mapVO);
+				velParam.putAll(mapVO);
+			}
+			if(!"ALL".equals(condition.getJoCrrCd())){
 				velParam.put("jo_crr_cds", jooList);
 				param.put("jo_crr_cds", "ALL");
 			}else{
 				velParam.put("jo_crr_cds", "ALL");
 				param.put("jo_crr_cds", "ALL");
 			}
-			if(jooCarrierVO.getRlaneCd().isEmpty()){
-				param.put("rlane_cd", "");
-				velParam.put("rlane_cd", "");
-			}else{
-				param.put("rlane_cd", jooCarrierVO.getRlaneCd());
-				velParam.put("rlane_cd", jooCarrierVO.getRlaneCd());
-			}
-			if(tradeVO.getTrdCd().isEmpty()){
-				param.put("trd_cd", "");
-				velParam.put("trd_cd", "");
-			}else{
-				param.put("trd_cd", tradeVO.getTrdCd());
-				velParam.put("trd_cd", tradeVO.getTrdCd());
-			}
-			param.put("fr_acct_yrmon",tradeVO.getFrAcctYrmon());
-			param.put("to_acct_yrmon",tradeVO.getToAcctYrmon());
-			velParam.put("fr_acct_yrmon", tradeVO.getFrAcctYrmon());
-			velParam.put("to_acct_yrmon", tradeVO.getToAcctYrmon());
 			dbRowset = new SQLExecuter("").executeQuery((ISQLTemplate) new SguTranningDBDAODetailVORSQL(),param, velParam);
 			list = (List) RowSetUtil.rowSetToVOs(dbRowset, DetailVO.class);
 		} catch (SQLException se) {
@@ -239,5 +218,9 @@ public class SguTranningDBDAO extends DBDAOSupport {
 		}
 		return list;
 	}
+
+	
+	
+
 
 }

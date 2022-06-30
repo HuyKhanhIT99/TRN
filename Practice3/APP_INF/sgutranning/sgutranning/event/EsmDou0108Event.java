@@ -13,8 +13,10 @@
 package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.event;
 
 import com.clt.framework.support.layer.event.EventSupport;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.ConditionVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
+import com.tangosol.coherence.reporter.Collection;
 
 
 /**
@@ -31,7 +33,16 @@ public class EsmDou0108Event extends EventSupport {
 	private static final long serialVersionUID = 1L;
 	JooCarrierVO jooCarrierVO = null;
 	JooCarrierVO[] jooCarrierVOs = null;
+	ConditionVO condition = null;
 	
+	public ConditionVO getCondition() {
+		return condition;
+	}
+
+	public void setCondition(ConditionVO condition) {
+		this.condition = condition;
+	}
+
 	TradeVO tradeVO = null;
 	public TradeVO getTradeVO() {
 		return tradeVO;

@@ -14,6 +14,8 @@ package com.clt.apps.opus.esm.clv.sgutranning.sgutranning.event;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.clt.apps.opus.esm.clv.sgutraning01.errmsgmanagement.vo.ErrMsgVO;
+import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.ConditionVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.JooCarrierVO;
 import com.clt.apps.opus.esm.clv.sgutranning.sgutranning.vo.TradeVO;
 import com.clt.framework.component.util.JSPUtil;
@@ -56,16 +58,8 @@ public class ESM_DOU_0108HTMLAction extends HTMLActionSupport {
 		//Check if FormCommand is
 		// SEARCH , we will search data for summary grid 
 		if(command.isCommand(FormCommand.SEARCH)) {
-			JooCarrierVO joo = new JooCarrierVO();
-			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
-			joo.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
-			TradeVO trade = new TradeVO();
-			String a =JSPUtil.getParameter(request, "s_trd_cd", "");
-			trade.setTrdCd(a);
-			trade.setFrAcctYrmon(JSPUtil.getParameter(request, "fr_acct_yrmon", ""));
-			trade.setToAcctYrmon(JSPUtil.getParameter(request, "to_acct_yrmon", ""));
-			event.setJooCarrierVO(joo);
-			event.setTradeVO(trade);
+			ConditionVO conditionVO = (ConditionVO)getVO(request, ConditionVO .class,"");
+			event.setCondition(conditionVO);
 		}
 		// SEARCH01 , we will get data for land combo box 
 		else if(command.isCommand(FormCommand.SEARCH01)) {
@@ -82,16 +76,8 @@ public class ESM_DOU_0108HTMLAction extends HTMLActionSupport {
 		}
 		//SEARCH03 , we will search data for detail grid
 		else if(command.isCommand(FormCommand.SEARCH03)){
-			JooCarrierVO joo = new JooCarrierVO();
-			joo.setJoCrrCd(JSPUtil.getParameter(request, "s_jo_crr_cd", ""));
-			joo.setRlaneCd(JSPUtil.getParameter(request, "s_rlane_cd", ""));
-			TradeVO trade = new TradeVO();
-			String a =JSPUtil.getParameter(request, "s_trd_cd", "");
-			trade.setTrdCd(a);
-			trade.setFrAcctYrmon(JSPUtil.getParameter(request, "fr_acct_yrmon", ""));
-			trade.setToAcctYrmon(JSPUtil.getParameter(request, "to_acct_yrmon", ""));
-			event.setJooCarrierVO(joo);
-			event.setTradeVO(trade);
+			ConditionVO conditionVO = (ConditionVO)getVO(request, ConditionVO .class,"");
+			event.setCondition(conditionVO);
 		}
 		return event;
 	}
